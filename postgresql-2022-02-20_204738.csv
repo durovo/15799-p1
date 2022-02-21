@@ -1,0 +1,1929 @@
+2022-02-20 20:47:38.897 UTC,,,ending log output to stderr
+2022-02-20 20:47:38.897 UTC,,,"starting PostgreSQL 14.2 (Ubuntu 14.2-1.pgdg18.04+1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0, 64-bit"
+2022-02-20 20:47:38.897 UTC,,,"listening on IPv4 address ""127.0.0.1"", port 5432"
+2022-02-20 20:47:38.902 UTC,,,"listening on Unix socket ""/var/run/postgresql/.s.PGSQL.5432"""
+2022-02-20 20:47:38.915 UTC,,,database system was shut down at 2022-02-20 20:47:38 UTC
+2022-02-20 20:47:38.930 UTC,,,database system is ready to accept connections
+2022-02-20 20:47:40.003 UTC,postgres,idle,statement: 
+2022-02-20 20:47:40.518 UTC,postgres,idle,statement: 
+2022-02-20 20:47:41.032 UTC,postgres,idle,statement: 
+2022-02-20 20:47:48.549 UTC,project1user,BEGIN,execute <unnamed>: BEGIN
+2022-02-20 20:47:48.550 UTC,project1user,SET,execute <unnamed>: SET extra_float_digits = 3
+2022-02-20 20:47:48.550 UTC,project1user,SET,execute <unnamed>: SET application_name = 'PostgreSQL JDBC Driver'
+2022-02-20 20:47:48.557 UTC,project1user,COMMIT,execute <unnamed>: COMMIT
+2022-02-20 20:47:48.571 UTC,project1user,SELECT,execute <unnamed>: select current_schema()
+2022-02-20 20:47:48.581 UTC,project1user,SELECT,"execute <unnamed>: SELECT NULL AS TABLE_CAT, n.nspname AS TABLE_SCHEM, c.relname AS TABLE_NAME,  CASE n.nspname ~ '^pg_' OR n.nspname = 'information_schema'  WHEN true THEN CASE  WHEN n.nspname = 'pg_catalog' OR n.nspname = 'information_schema' THEN CASE c.relkind   WHEN 'r' THEN 'SYSTEM TABLE'   WHEN 'v' THEN 'SYSTEM VIEW'   WHEN 'i' THEN 'SYSTEM INDEX'   ELSE NULL   END  WHEN n.nspname = 'pg_toast' THEN CASE c.relkind   WHEN 'r' THEN 'SYSTEM TOAST TABLE'   WHEN 'i' THEN 'SYSTEM TOAST INDEX'   ELSE NULL   END  ELSE CASE c.relkind   WHEN 'r' THEN 'TEMPORARY TABLE'   WHEN 'p' THEN 'TEMPORARY TABLE'   WHEN 'i' THEN 'TEMPORARY INDEX'   WHEN 'S' THEN 'TEMPORARY SEQUENCE'   WHEN 'v' THEN 'TEMPORARY VIEW'   ELSE NULL   END  END  WHEN false THEN CASE c.relkind  WHEN 'r' THEN 'TABLE'  WHEN 'p' THEN 'PARTITIONED TABLE'  WHEN 'i' THEN 'INDEX'  WHEN 'P' then 'PARTITIONED INDEX'  WHEN 'S' THEN 'SEQUENCE'  WHEN 'v' THEN 'VIEW'  WHEN 'c' THEN 'TYPE'  WHEN 'f' THEN 'FOREIGN TABLE'  WHEN 'm' THEN 'MATERIALIZED VIEW'  ELSE NULL  END  ELSE NULL  END  AS TABLE_TYPE, d.description AS REMARKS,  '' as TYPE_CAT, '' as TYPE_SCHEM, '' as TYPE_NAME, '' AS SELF_REFERENCING_COL_NAME, '' AS REF_GENERATION  FROM pg_catalog.pg_namespace n, pg_catalog.pg_class c  LEFT JOIN pg_catalog.pg_description d ON (c.oid = d.objoid AND d.objsubid = 0  and d.classoid = 'pg_class'::regclass)  WHERE c.relnamespace = n.oid  AND n.nspname LIKE 'public' AND (false  OR ( c.relkind = 'r' AND n.nspname !~ '^pg_' AND n.nspname <> 'information_schema' ) )  ORDER BY TABLE_TYPE,TABLE_SCHEM,TABLE_NAME "
+2022-02-20 20:47:48.587 UTC,project1user,SELECT,"execute <unnamed>: SELECT * FROM (SELECT n.nspname,c.relname,a.attname,a.atttypid,a.attnotnull OR (t.typtype = 'd' AND t.typnotnull) AS attnotnull,a.atttypmod,a.attlen,t.typtypmod,row_number() OVER (PARTITION BY a.attrelid ORDER BY a.attnum) AS attnum, nullif(a.attidentity, '') as attidentity,pg_catalog.pg_get_expr(def.adbin, def.adrelid) AS adsrc,dsc.description,t.typbasetype,t.typtype  FROM pg_catalog.pg_namespace n  JOIN pg_catalog.pg_class c ON (c.relnamespace = n.oid)  JOIN pg_catalog.pg_attribute a ON (a.attrelid=c.oid)  JOIN pg_catalog.pg_type t ON (a.atttypid = t.oid)  LEFT JOIN pg_catalog.pg_attrdef def ON (a.attrelid=def.adrelid AND a.attnum = def.adnum)  LEFT JOIN pg_catalog.pg_description dsc ON (c.oid=dsc.objoid AND a.attnum = dsc.objsubid)  LEFT JOIN pg_catalog.pg_class dc ON (dc.oid=dsc.classoid AND dc.relname='pg_class')  LEFT JOIN pg_catalog.pg_namespace dn ON (dc.relnamespace=dn.oid AND dn.nspname='pg_catalog')  WHERE c.relkind in ('r','p','v','f','m') and a.attnum > 0 AND NOT a.attisdropped  AND n.nspname LIKE 'public' AND c.relname LIKE 'item') c WHERE true  ORDER BY nspname,c.relname,attnum "
+2022-02-20 20:47:48.591 UTC,project1user,SELECT,"execute <unnamed>: SELECT     tmp.TABLE_CAT,     tmp.TABLE_SCHEM,     tmp.TABLE_NAME,     tmp.NON_UNIQUE,     tmp.INDEX_QUALIFIER,     tmp.INDEX_NAME,     tmp.TYPE,     tmp.ORDINAL_POSITION,     trim(both '""' from pg_catalog.pg_get_indexdef(tmp.CI_OID, tmp.ORDINAL_POSITION, false)) AS COLUMN_NAME,   CASE tmp.AM_NAME     WHEN 'btree' THEN CASE tmp.I_INDOPTION[tmp.ORDINAL_POSITION - 1] & 1::smallint       WHEN 1 THEN 'D'       ELSE 'A'     END     ELSE NULL   END AS ASC_OR_DESC,     tmp.CARDINALITY,     tmp.PAGES,     tmp.FILTER_CONDITION FROM (SELECT NULL AS TABLE_CAT, n.nspname AS TABLE_SCHEM,   ct.relname AS TABLE_NAME, NOT i.indisunique AS NON_UNIQUE,   NULL AS INDEX_QUALIFIER, ci.relname AS INDEX_NAME,   CASE i.indisclustered     WHEN true THEN 1    ELSE CASE am.amname       WHEN 'hash' THEN 2      ELSE 3    END   END AS TYPE,   (information_schema._pg_expandarray(i.indkey)).n AS ORDINAL_POSITION,   ci.reltuples AS CARDINALITY,   ci.relpages AS PAGES,   pg_catalog.pg_get_expr(i.indpred, i.indrelid) AS FILTER_CONDITION,   ci.oid AS CI_OID,   i.indoption AS I_INDOPTION,   am.amname AS AM_NAME FROM pg_catalog.pg_class ct   JOIN pg_catalog.pg_namespace n ON (ct.relnamespace = n.oid)   JOIN pg_catalog.pg_index i ON (ct.oid = i.indrelid)   JOIN pg_catalog.pg_class ci ON (ci.oid = i.indexrelid)   JOIN pg_catalog.pg_am am ON (ci.relam = am.oid) WHERE true  AND n.nspname = 'public' AND ct.relname = 'item') AS tmp ORDER BY NON_UNIQUE, TYPE, INDEX_NAME, ORDINAL_POSITION "
+2022-02-20 20:47:48.594 UTC,project1user,SELECT,"execute <unnamed>: SELECT * FROM (SELECT n.nspname,c.relname,a.attname,a.atttypid,a.attnotnull OR (t.typtype = 'd' AND t.typnotnull) AS attnotnull,a.atttypmod,a.attlen,t.typtypmod,row_number() OVER (PARTITION BY a.attrelid ORDER BY a.attnum) AS attnum, nullif(a.attidentity, '') as attidentity,pg_catalog.pg_get_expr(def.adbin, def.adrelid) AS adsrc,dsc.description,t.typbasetype,t.typtype  FROM pg_catalog.pg_namespace n  JOIN pg_catalog.pg_class c ON (c.relnamespace = n.oid)  JOIN pg_catalog.pg_attribute a ON (a.attrelid=c.oid)  JOIN pg_catalog.pg_type t ON (a.atttypid = t.oid)  LEFT JOIN pg_catalog.pg_attrdef def ON (a.attrelid=def.adrelid AND a.attnum = def.adnum)  LEFT JOIN pg_catalog.pg_description dsc ON (c.oid=dsc.objoid AND a.attnum = dsc.objsubid)  LEFT JOIN pg_catalog.pg_class dc ON (dc.oid=dsc.classoid AND dc.relname='pg_class')  LEFT JOIN pg_catalog.pg_namespace dn ON (dc.relnamespace=dn.oid AND dn.nspname='pg_catalog')  WHERE c.relkind in ('r','p','v','f','m') and a.attnum > 0 AND NOT a.attisdropped  AND n.nspname LIKE 'public' AND c.relname LIKE 'review') c WHERE true  ORDER BY nspname,c.relname,attnum "
+2022-02-20 20:47:48.597 UTC,project1user,SELECT,"execute <unnamed>: SELECT     tmp.TABLE_CAT,     tmp.TABLE_SCHEM,     tmp.TABLE_NAME,     tmp.NON_UNIQUE,     tmp.INDEX_QUALIFIER,     tmp.INDEX_NAME,     tmp.TYPE,     tmp.ORDINAL_POSITION,     trim(both '""' from pg_catalog.pg_get_indexdef(tmp.CI_OID, tmp.ORDINAL_POSITION, false)) AS COLUMN_NAME,   CASE tmp.AM_NAME     WHEN 'btree' THEN CASE tmp.I_INDOPTION[tmp.ORDINAL_POSITION - 1] & 1::smallint       WHEN 1 THEN 'D'       ELSE 'A'     END     ELSE NULL   END AS ASC_OR_DESC,     tmp.CARDINALITY,     tmp.PAGES,     tmp.FILTER_CONDITION FROM (SELECT NULL AS TABLE_CAT, n.nspname AS TABLE_SCHEM,   ct.relname AS TABLE_NAME, NOT i.indisunique AS NON_UNIQUE,   NULL AS INDEX_QUALIFIER, ci.relname AS INDEX_NAME,   CASE i.indisclustered     WHEN true THEN 1    ELSE CASE am.amname       WHEN 'hash' THEN 2      ELSE 3    END   END AS TYPE,   (information_schema._pg_expandarray(i.indkey)).n AS ORDINAL_POSITION,   ci.reltuples AS CARDINALITY,   ci.relpages AS PAGES,   pg_catalog.pg_get_expr(i.indpred, i.indrelid) AS FILTER_CONDITION,   ci.oid AS CI_OID,   i.indoption AS I_INDOPTION,   am.amname AS AM_NAME FROM pg_catalog.pg_class ct   JOIN pg_catalog.pg_namespace n ON (ct.relnamespace = n.oid)   JOIN pg_catalog.pg_index i ON (ct.oid = i.indrelid)   JOIN pg_catalog.pg_class ci ON (ci.oid = i.indexrelid)   JOIN pg_catalog.pg_am am ON (ci.relam = am.oid) WHERE true  AND n.nspname = 'public' AND ct.relname = 'review') AS tmp ORDER BY NON_UNIQUE, TYPE, INDEX_NAME, ORDINAL_POSITION "
+2022-02-20 20:47:48.601 UTC,project1user,SELECT,"execute <unnamed>: SELECT * FROM (SELECT n.nspname,c.relname,a.attname,a.atttypid,a.attnotnull OR (t.typtype = 'd' AND t.typnotnull) AS attnotnull,a.atttypmod,a.attlen,t.typtypmod,row_number() OVER (PARTITION BY a.attrelid ORDER BY a.attnum) AS attnum, nullif(a.attidentity, '') as attidentity,pg_catalog.pg_get_expr(def.adbin, def.adrelid) AS adsrc,dsc.description,t.typbasetype,t.typtype  FROM pg_catalog.pg_namespace n  JOIN pg_catalog.pg_class c ON (c.relnamespace = n.oid)  JOIN pg_catalog.pg_attribute a ON (a.attrelid=c.oid)  JOIN pg_catalog.pg_type t ON (a.atttypid = t.oid)  LEFT JOIN pg_catalog.pg_attrdef def ON (a.attrelid=def.adrelid AND a.attnum = def.adnum)  LEFT JOIN pg_catalog.pg_description dsc ON (c.oid=dsc.objoid AND a.attnum = dsc.objsubid)  LEFT JOIN pg_catalog.pg_class dc ON (dc.oid=dsc.classoid AND dc.relname='pg_class')  LEFT JOIN pg_catalog.pg_namespace dn ON (dc.relnamespace=dn.oid AND dn.nspname='pg_catalog')  WHERE c.relkind in ('r','p','v','f','m') and a.attnum > 0 AND NOT a.attisdropped  AND n.nspname LIKE 'public' AND c.relname LIKE 'review_rating') c WHERE true  ORDER BY nspname,c.relname,attnum "
+2022-02-20 20:47:48.604 UTC,project1user,SELECT,"execute <unnamed>: SELECT     tmp.TABLE_CAT,     tmp.TABLE_SCHEM,     tmp.TABLE_NAME,     tmp.NON_UNIQUE,     tmp.INDEX_QUALIFIER,     tmp.INDEX_NAME,     tmp.TYPE,     tmp.ORDINAL_POSITION,     trim(both '""' from pg_catalog.pg_get_indexdef(tmp.CI_OID, tmp.ORDINAL_POSITION, false)) AS COLUMN_NAME,   CASE tmp.AM_NAME     WHEN 'btree' THEN CASE tmp.I_INDOPTION[tmp.ORDINAL_POSITION - 1] & 1::smallint       WHEN 1 THEN 'D'       ELSE 'A'     END     ELSE NULL   END AS ASC_OR_DESC,     tmp.CARDINALITY,     tmp.PAGES,     tmp.FILTER_CONDITION FROM (SELECT NULL AS TABLE_CAT, n.nspname AS TABLE_SCHEM,   ct.relname AS TABLE_NAME, NOT i.indisunique AS NON_UNIQUE,   NULL AS INDEX_QUALIFIER, ci.relname AS INDEX_NAME,   CASE i.indisclustered     WHEN true THEN 1    ELSE CASE am.amname       WHEN 'hash' THEN 2      ELSE 3    END   END AS TYPE,   (information_schema._pg_expandarray(i.indkey)).n AS ORDINAL_POSITION,   ci.reltuples AS CARDINALITY,   ci.relpages AS PAGES,   pg_catalog.pg_get_expr(i.indpred, i.indrelid) AS FILTER_CONDITION,   ci.oid AS CI_OID,   i.indoption AS I_INDOPTION,   am.amname AS AM_NAME FROM pg_catalog.pg_class ct   JOIN pg_catalog.pg_namespace n ON (ct.relnamespace = n.oid)   JOIN pg_catalog.pg_index i ON (ct.oid = i.indrelid)   JOIN pg_catalog.pg_class ci ON (ci.oid = i.indexrelid)   JOIN pg_catalog.pg_am am ON (ci.relam = am.oid) WHERE true  AND n.nspname = 'public' AND ct.relname = 'review_rating') AS tmp ORDER BY NON_UNIQUE, TYPE, INDEX_NAME, ORDINAL_POSITION "
+2022-02-20 20:47:48.607 UTC,project1user,SELECT,"execute <unnamed>: SELECT * FROM (SELECT n.nspname,c.relname,a.attname,a.atttypid,a.attnotnull OR (t.typtype = 'd' AND t.typnotnull) AS attnotnull,a.atttypmod,a.attlen,t.typtypmod,row_number() OVER (PARTITION BY a.attrelid ORDER BY a.attnum) AS attnum, nullif(a.attidentity, '') as attidentity,pg_catalog.pg_get_expr(def.adbin, def.adrelid) AS adsrc,dsc.description,t.typbasetype,t.typtype  FROM pg_catalog.pg_namespace n  JOIN pg_catalog.pg_class c ON (c.relnamespace = n.oid)  JOIN pg_catalog.pg_attribute a ON (a.attrelid=c.oid)  JOIN pg_catalog.pg_type t ON (a.atttypid = t.oid)  LEFT JOIN pg_catalog.pg_attrdef def ON (a.attrelid=def.adrelid AND a.attnum = def.adnum)  LEFT JOIN pg_catalog.pg_description dsc ON (c.oid=dsc.objoid AND a.attnum = dsc.objsubid)  LEFT JOIN pg_catalog.pg_class dc ON (dc.oid=dsc.classoid AND dc.relname='pg_class')  LEFT JOIN pg_catalog.pg_namespace dn ON (dc.relnamespace=dn.oid AND dn.nspname='pg_catalog')  WHERE c.relkind in ('r','p','v','f','m') and a.attnum > 0 AND NOT a.attisdropped  AND n.nspname LIKE 'public' AND c.relname LIKE 'trust') c WHERE true  ORDER BY nspname,c.relname,attnum "
+2022-02-20 20:47:48.609 UTC,project1user,SELECT,"execute <unnamed>: SELECT     tmp.TABLE_CAT,     tmp.TABLE_SCHEM,     tmp.TABLE_NAME,     tmp.NON_UNIQUE,     tmp.INDEX_QUALIFIER,     tmp.INDEX_NAME,     tmp.TYPE,     tmp.ORDINAL_POSITION,     trim(both '""' from pg_catalog.pg_get_indexdef(tmp.CI_OID, tmp.ORDINAL_POSITION, false)) AS COLUMN_NAME,   CASE tmp.AM_NAME     WHEN 'btree' THEN CASE tmp.I_INDOPTION[tmp.ORDINAL_POSITION - 1] & 1::smallint       WHEN 1 THEN 'D'       ELSE 'A'     END     ELSE NULL   END AS ASC_OR_DESC,     tmp.CARDINALITY,     tmp.PAGES,     tmp.FILTER_CONDITION FROM (SELECT NULL AS TABLE_CAT, n.nspname AS TABLE_SCHEM,   ct.relname AS TABLE_NAME, NOT i.indisunique AS NON_UNIQUE,   NULL AS INDEX_QUALIFIER, ci.relname AS INDEX_NAME,   CASE i.indisclustered     WHEN true THEN 1    ELSE CASE am.amname       WHEN 'hash' THEN 2      ELSE 3    END   END AS TYPE,   (information_schema._pg_expandarray(i.indkey)).n AS ORDINAL_POSITION,   ci.reltuples AS CARDINALITY,   ci.relpages AS PAGES,   pg_catalog.pg_get_expr(i.indpred, i.indrelid) AS FILTER_CONDITION,   ci.oid AS CI_OID,   i.indoption AS I_INDOPTION,   am.amname AS AM_NAME FROM pg_catalog.pg_class ct   JOIN pg_catalog.pg_namespace n ON (ct.relnamespace = n.oid)   JOIN pg_catalog.pg_index i ON (ct.oid = i.indrelid)   JOIN pg_catalog.pg_class ci ON (ci.oid = i.indexrelid)   JOIN pg_catalog.pg_am am ON (ci.relam = am.oid) WHERE true  AND n.nspname = 'public' AND ct.relname = 'trust') AS tmp ORDER BY NON_UNIQUE, TYPE, INDEX_NAME, ORDINAL_POSITION "
+2022-02-20 20:47:48.611 UTC,project1user,SELECT,"execute <unnamed>: SELECT * FROM (SELECT n.nspname,c.relname,a.attname,a.atttypid,a.attnotnull OR (t.typtype = 'd' AND t.typnotnull) AS attnotnull,a.atttypmod,a.attlen,t.typtypmod,row_number() OVER (PARTITION BY a.attrelid ORDER BY a.attnum) AS attnum, nullif(a.attidentity, '') as attidentity,pg_catalog.pg_get_expr(def.adbin, def.adrelid) AS adsrc,dsc.description,t.typbasetype,t.typtype  FROM pg_catalog.pg_namespace n  JOIN pg_catalog.pg_class c ON (c.relnamespace = n.oid)  JOIN pg_catalog.pg_attribute a ON (a.attrelid=c.oid)  JOIN pg_catalog.pg_type t ON (a.atttypid = t.oid)  LEFT JOIN pg_catalog.pg_attrdef def ON (a.attrelid=def.adrelid AND a.attnum = def.adnum)  LEFT JOIN pg_catalog.pg_description dsc ON (c.oid=dsc.objoid AND a.attnum = dsc.objsubid)  LEFT JOIN pg_catalog.pg_class dc ON (dc.oid=dsc.classoid AND dc.relname='pg_class')  LEFT JOIN pg_catalog.pg_namespace dn ON (dc.relnamespace=dn.oid AND dn.nspname='pg_catalog')  WHERE c.relkind in ('r','p','v','f','m') and a.attnum > 0 AND NOT a.attisdropped  AND n.nspname LIKE 'public' AND c.relname LIKE 'useracct') c WHERE true  ORDER BY nspname,c.relname,attnum "
+2022-02-20 20:47:48.616 UTC,project1user,SELECT,"execute <unnamed>: SELECT     tmp.TABLE_CAT,     tmp.TABLE_SCHEM,     tmp.TABLE_NAME,     tmp.NON_UNIQUE,     tmp.INDEX_QUALIFIER,     tmp.INDEX_NAME,     tmp.TYPE,     tmp.ORDINAL_POSITION,     trim(both '""' from pg_catalog.pg_get_indexdef(tmp.CI_OID, tmp.ORDINAL_POSITION, false)) AS COLUMN_NAME,   CASE tmp.AM_NAME     WHEN 'btree' THEN CASE tmp.I_INDOPTION[tmp.ORDINAL_POSITION - 1] & 1::smallint       WHEN 1 THEN 'D'       ELSE 'A'     END     ELSE NULL   END AS ASC_OR_DESC,     tmp.CARDINALITY,     tmp.PAGES,     tmp.FILTER_CONDITION FROM (SELECT NULL AS TABLE_CAT, n.nspname AS TABLE_SCHEM,   ct.relname AS TABLE_NAME, NOT i.indisunique AS NON_UNIQUE,   NULL AS INDEX_QUALIFIER, ci.relname AS INDEX_NAME,   CASE i.indisclustered     WHEN true THEN 1    ELSE CASE am.amname       WHEN 'hash' THEN 2      ELSE 3    END   END AS TYPE,   (information_schema._pg_expandarray(i.indkey)).n AS ORDINAL_POSITION,   ci.reltuples AS CARDINALITY,   ci.relpages AS PAGES,   pg_catalog.pg_get_expr(i.indpred, i.indrelid) AS FILTER_CONDITION,   ci.oid AS CI_OID,   i.indoption AS I_INDOPTION,   am.amname AS AM_NAME FROM pg_catalog.pg_class ct   JOIN pg_catalog.pg_namespace n ON (ct.relnamespace = n.oid)   JOIN pg_catalog.pg_index i ON (ct.oid = i.indrelid)   JOIN pg_catalog.pg_class ci ON (ci.oid = i.indexrelid)   JOIN pg_catalog.pg_am am ON (ci.relam = am.oid) WHERE true  AND n.nspname = 'public' AND ct.relname = 'useracct') AS tmp ORDER BY NON_UNIQUE, TYPE, INDEX_NAME, ORDINAL_POSITION "
+2022-02-20 20:47:48.617 UTC,project1user,SELECT,execute <unnamed>: SELECT setting FROM pg_catalog.pg_settings WHERE name='max_index_keys'
+2022-02-20 20:47:48.629 UTC,project1user,SELECT,"execute <unnamed>: SELECT NULL::text AS PKTABLE_CAT, pkn.nspname AS PKTABLE_SCHEM, pkc.relname AS PKTABLE_NAME, pka.attname AS PKCOLUMN_NAME, NULL::text AS FKTABLE_CAT, fkn.nspname AS FKTABLE_SCHEM, fkc.relname AS FKTABLE_NAME, fka.attname AS FKCOLUMN_NAME, pos.n AS KEY_SEQ, CASE con.confupdtype  WHEN 'c' THEN 0 WHEN 'n' THEN 2 WHEN 'd' THEN 4 WHEN 'r' THEN 1 WHEN 'p' THEN 1 WHEN 'a' THEN 3 ELSE NULL END AS UPDATE_RULE, CASE con.confdeltype  WHEN 'c' THEN 0 WHEN 'n' THEN 2 WHEN 'd' THEN 4 WHEN 'r' THEN 1 WHEN 'p' THEN 1 WHEN 'a' THEN 3 ELSE NULL END AS DELETE_RULE, con.conname AS FK_NAME, pkic.relname AS PK_NAME, CASE  WHEN con.condeferrable AND con.condeferred THEN 5 WHEN con.condeferrable THEN 6 ELSE 7 END AS DEFERRABILITY  FROM  pg_catalog.pg_namespace pkn, pg_catalog.pg_class pkc, pg_catalog.pg_attribute pka,  pg_catalog.pg_namespace fkn, pg_catalog.pg_class fkc, pg_catalog.pg_attribute fka,  pg_catalog.pg_constraint con,  pg_catalog.generate_series(1, 32) pos(n),  pg_catalog.pg_class pkic WHERE pkn.oid = pkc.relnamespace AND pkc.oid = pka.attrelid AND pka.attnum = con.confkey[pos.n] AND con.confrelid = pkc.oid  AND fkn.oid = fkc.relnamespace AND fkc.oid = fka.attrelid AND fka.attnum = con.conkey[pos.n] AND con.conrelid = fkc.oid  AND con.contype = 'f' AND (pkic.relkind = 'i' OR pkic.relkind = 'I') AND pkic.oid = con.conindid  AND fkn.nspname = 'public' AND fkc.relname = 'trust' ORDER BY pkn.nspname,pkc.relname, con.conname,pos.n"
+2022-02-20 20:47:48.640 UTC,project1user,SELECT,"execute <unnamed>: SELECT NULL::text AS PKTABLE_CAT, pkn.nspname AS PKTABLE_SCHEM, pkc.relname AS PKTABLE_NAME, pka.attname AS PKCOLUMN_NAME, NULL::text AS FKTABLE_CAT, fkn.nspname AS FKTABLE_SCHEM, fkc.relname AS FKTABLE_NAME, fka.attname AS FKCOLUMN_NAME, pos.n AS KEY_SEQ, CASE con.confupdtype  WHEN 'c' THEN 0 WHEN 'n' THEN 2 WHEN 'd' THEN 4 WHEN 'r' THEN 1 WHEN 'p' THEN 1 WHEN 'a' THEN 3 ELSE NULL END AS UPDATE_RULE, CASE con.confdeltype  WHEN 'c' THEN 0 WHEN 'n' THEN 2 WHEN 'd' THEN 4 WHEN 'r' THEN 1 WHEN 'p' THEN 1 WHEN 'a' THEN 3 ELSE NULL END AS DELETE_RULE, con.conname AS FK_NAME, pkic.relname AS PK_NAME, CASE  WHEN con.condeferrable AND con.condeferred THEN 5 WHEN con.condeferrable THEN 6 ELSE 7 END AS DEFERRABILITY  FROM  pg_catalog.pg_namespace pkn, pg_catalog.pg_class pkc, pg_catalog.pg_attribute pka,  pg_catalog.pg_namespace fkn, pg_catalog.pg_class fkc, pg_catalog.pg_attribute fka,  pg_catalog.pg_constraint con,  pg_catalog.generate_series(1, 32) pos(n),  pg_catalog.pg_class pkic WHERE pkn.oid = pkc.relnamespace AND pkc.oid = pka.attrelid AND pka.attnum = con.confkey[pos.n] AND con.confrelid = pkc.oid  AND fkn.oid = fkc.relnamespace AND fkc.oid = fka.attrelid AND fka.attnum = con.conkey[pos.n] AND con.conrelid = fkc.oid  AND con.contype = 'f' AND (pkic.relkind = 'i' OR pkic.relkind = 'I') AND pkic.oid = con.conindid  AND fkn.nspname = 'public' AND fkc.relname = 'item' ORDER BY pkn.nspname,pkc.relname, con.conname,pos.n"
+2022-02-20 20:47:48.654 UTC,project1user,SELECT,"execute <unnamed>: SELECT NULL::text AS PKTABLE_CAT, pkn.nspname AS PKTABLE_SCHEM, pkc.relname AS PKTABLE_NAME, pka.attname AS PKCOLUMN_NAME, NULL::text AS FKTABLE_CAT, fkn.nspname AS FKTABLE_SCHEM, fkc.relname AS FKTABLE_NAME, fka.attname AS FKCOLUMN_NAME, pos.n AS KEY_SEQ, CASE con.confupdtype  WHEN 'c' THEN 0 WHEN 'n' THEN 2 WHEN 'd' THEN 4 WHEN 'r' THEN 1 WHEN 'p' THEN 1 WHEN 'a' THEN 3 ELSE NULL END AS UPDATE_RULE, CASE con.confdeltype  WHEN 'c' THEN 0 WHEN 'n' THEN 2 WHEN 'd' THEN 4 WHEN 'r' THEN 1 WHEN 'p' THEN 1 WHEN 'a' THEN 3 ELSE NULL END AS DELETE_RULE, con.conname AS FK_NAME, pkic.relname AS PK_NAME, CASE  WHEN con.condeferrable AND con.condeferred THEN 5 WHEN con.condeferrable THEN 6 ELSE 7 END AS DEFERRABILITY  FROM  pg_catalog.pg_namespace pkn, pg_catalog.pg_class pkc, pg_catalog.pg_attribute pka,  pg_catalog.pg_namespace fkn, pg_catalog.pg_class fkc, pg_catalog.pg_attribute fka,  pg_catalog.pg_constraint con,  pg_catalog.generate_series(1, 32) pos(n),  pg_catalog.pg_class pkic WHERE pkn.oid = pkc.relnamespace AND pkc.oid = pka.attrelid AND pka.attnum = con.confkey[pos.n] AND con.confrelid = pkc.oid  AND fkn.oid = fkc.relnamespace AND fkc.oid = fka.attrelid AND fka.attnum = con.conkey[pos.n] AND con.conrelid = fkc.oid  AND con.contype = 'f' AND (pkic.relkind = 'i' OR pkic.relkind = 'I') AND pkic.oid = con.conindid  AND fkn.nspname = 'public' AND fkc.relname = 'review' ORDER BY pkn.nspname,pkc.relname, con.conname,pos.n"
+2022-02-20 20:47:48.665 UTC,project1user,SELECT,"execute <unnamed>: SELECT NULL::text AS PKTABLE_CAT, pkn.nspname AS PKTABLE_SCHEM, pkc.relname AS PKTABLE_NAME, pka.attname AS PKCOLUMN_NAME, NULL::text AS FKTABLE_CAT, fkn.nspname AS FKTABLE_SCHEM, fkc.relname AS FKTABLE_NAME, fka.attname AS FKCOLUMN_NAME, pos.n AS KEY_SEQ, CASE con.confupdtype  WHEN 'c' THEN 0 WHEN 'n' THEN 2 WHEN 'd' THEN 4 WHEN 'r' THEN 1 WHEN 'p' THEN 1 WHEN 'a' THEN 3 ELSE NULL END AS UPDATE_RULE, CASE con.confdeltype  WHEN 'c' THEN 0 WHEN 'n' THEN 2 WHEN 'd' THEN 4 WHEN 'r' THEN 1 WHEN 'p' THEN 1 WHEN 'a' THEN 3 ELSE NULL END AS DELETE_RULE, con.conname AS FK_NAME, pkic.relname AS PK_NAME, CASE  WHEN con.condeferrable AND con.condeferred THEN 5 WHEN con.condeferrable THEN 6 ELSE 7 END AS DEFERRABILITY  FROM  pg_catalog.pg_namespace pkn, pg_catalog.pg_class pkc, pg_catalog.pg_attribute pka,  pg_catalog.pg_namespace fkn, pg_catalog.pg_class fkc, pg_catalog.pg_attribute fka,  pg_catalog.pg_constraint con,  pg_catalog.generate_series(1, 32) pos(n),  pg_catalog.pg_class pkic WHERE pkn.oid = pkc.relnamespace AND pkc.oid = pka.attrelid AND pka.attnum = con.confkey[pos.n] AND con.confrelid = pkc.oid  AND fkn.oid = fkc.relnamespace AND fkc.oid = fka.attrelid AND fka.attnum = con.conkey[pos.n] AND con.conrelid = fkc.oid  AND con.contype = 'f' AND (pkic.relkind = 'i' OR pkic.relkind = 'I') AND pkic.oid = con.conindid  AND fkn.nspname = 'public' AND fkc.relname = 'useracct' ORDER BY pkn.nspname,pkc.relname, con.conname,pos.n"
+2022-02-20 20:47:48.675 UTC,project1user,SELECT,"execute <unnamed>: SELECT NULL::text AS PKTABLE_CAT, pkn.nspname AS PKTABLE_SCHEM, pkc.relname AS PKTABLE_NAME, pka.attname AS PKCOLUMN_NAME, NULL::text AS FKTABLE_CAT, fkn.nspname AS FKTABLE_SCHEM, fkc.relname AS FKTABLE_NAME, fka.attname AS FKCOLUMN_NAME, pos.n AS KEY_SEQ, CASE con.confupdtype  WHEN 'c' THEN 0 WHEN 'n' THEN 2 WHEN 'd' THEN 4 WHEN 'r' THEN 1 WHEN 'p' THEN 1 WHEN 'a' THEN 3 ELSE NULL END AS UPDATE_RULE, CASE con.confdeltype  WHEN 'c' THEN 0 WHEN 'n' THEN 2 WHEN 'd' THEN 4 WHEN 'r' THEN 1 WHEN 'p' THEN 1 WHEN 'a' THEN 3 ELSE NULL END AS DELETE_RULE, con.conname AS FK_NAME, pkic.relname AS PK_NAME, CASE  WHEN con.condeferrable AND con.condeferred THEN 5 WHEN con.condeferrable THEN 6 ELSE 7 END AS DEFERRABILITY  FROM  pg_catalog.pg_namespace pkn, pg_catalog.pg_class pkc, pg_catalog.pg_attribute pka,  pg_catalog.pg_namespace fkn, pg_catalog.pg_class fkc, pg_catalog.pg_attribute fka,  pg_catalog.pg_constraint con,  pg_catalog.generate_series(1, 32) pos(n),  pg_catalog.pg_class pkic WHERE pkn.oid = pkc.relnamespace AND pkc.oid = pka.attrelid AND pka.attnum = con.confkey[pos.n] AND con.confrelid = pkc.oid  AND fkn.oid = fkc.relnamespace AND fkc.oid = fka.attrelid AND fka.attnum = con.conkey[pos.n] AND con.conrelid = fkc.oid  AND con.contype = 'f' AND (pkic.relkind = 'i' OR pkic.relkind = 'I') AND pkic.oid = con.conindid  AND fkn.nspname = 'public' AND fkc.relname = 'review_rating' ORDER BY pkn.nspname,pkc.relname, con.conname,pos.n"
+2022-02-20 20:47:48.738 UTC,project1user,BEGIN,execute <unnamed>: BEGIN
+2022-02-20 20:47:48.738 UTC,project1user,SET,execute <unnamed>: SET extra_float_digits = 3
+2022-02-20 20:47:48.739 UTC,project1user,SET,execute <unnamed>: SET application_name = 'PostgreSQL JDBC Driver'
+2022-02-20 20:47:48.739 UTC,project1user,COMMIT,execute <unnamed>: COMMIT
+2022-02-20 20:47:48.740 UTC,project1user,SELECT,execute <unnamed>: SELECT u_id FROM useracct
+2022-02-20 20:47:48.746 UTC,project1user,SELECT,execute <unnamed>: SELECT i_id FROM item
+2022-02-20 20:47:48.782 UTC,project1user,BEGIN,execute <unnamed>: BEGIN
+2022-02-20 20:47:48.783 UTC,project1user,SET,execute <unnamed>: SET extra_float_digits = 3
+2022-02-20 20:47:48.783 UTC,project1user,SET,execute <unnamed>: SET application_name = 'PostgreSQL JDBC Driver'
+2022-02-20 20:47:48.784 UTC,project1user,COMMIT,execute <unnamed>: COMMIT
+2022-02-20 20:47:48.784 UTC,project1user,SET,execute <unnamed>: SET SESSION CHARACTERISTICS AS TRANSACTION ISOLATION LEVEL READ COMMITTED
+2022-02-20 20:47:48.799 UTC,project1user,BEGIN,execute <unnamed>: BEGIN
+2022-02-20 20:47:48.800 UTC,project1user,SELECT,execute <unnamed>: SELECT * FROM review r WHERE r.i_id=$1 ORDER BY creation_date DESC
+2022-02-20 20:47:48.802 UTC,project1user,SELECT,execute <unnamed>: SELECT * FROM trust t WHERE t.source_u_id=$1
+2022-02-20 20:47:48.804 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:48.895 UTC,project1user,BEGIN,execute <unnamed>: BEGIN
+2022-02-20 20:47:48.898 UTC,project1user,SELECT,"execute <unnamed>: SELECT avg(rating) FROM review r, trust t WHERE r.u_id=t.target_u_id AND r.i_id=$1 AND t.source_u_id=$2"
+2022-02-20 20:47:48.900 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:48.995 UTC,project1user,BEGIN,execute <unnamed>: BEGIN
+2022-02-20 20:47:48.995 UTC,project1user,UPDATE,execute <unnamed>: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:47:49.000 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:49.094 UTC,project1user,BEGIN,execute <unnamed>: BEGIN
+2022-02-20 20:47:49.094 UTC,project1user,UPDATE,execute <unnamed>: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:47:49.095 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:49.194 UTC,project1user,BEGIN,execute <unnamed>: BEGIN
+2022-02-20 20:47:49.194 UTC,project1user,SELECT,execute <unnamed>: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:47:49.196 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:49.294 UTC,project1user,BEGIN,execute <unnamed>: BEGIN
+2022-02-20 20:47:49.294 UTC,project1user,UPDATE,execute <unnamed>: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:47:49.295 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:49.394 UTC,project1user,BEGIN,execute <unnamed>: BEGIN
+2022-02-20 20:47:49.395 UTC,project1user,SELECT,execute <unnamed>: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:47:49.396 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:49.493 UTC,project1user,BEGIN,execute <unnamed>: BEGIN
+2022-02-20 20:47:49.494 UTC,project1user,UPDATE,execute <unnamed>: UPDATE review SET rating = $1 WHERE i_id=$2 AND u_id=$3
+2022-02-20 20:47:49.495 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:49.594 UTC,project1user,BEGIN,execute <unnamed>: BEGIN
+2022-02-20 20:47:49.594 UTC,project1user,SELECT,"execute <unnamed>: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:47:49.596 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:49.694 UTC,project1user,BEGIN,execute <unnamed>: BEGIN
+2022-02-20 20:47:49.694 UTC,project1user,UPDATE,execute <unnamed>: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:47:49.695 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:49.794 UTC,project1user,BEGIN,execute <unnamed>: BEGIN
+2022-02-20 20:47:49.794 UTC,project1user,UPDATE,execute <unnamed>: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:47:49.796 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:49.893 UTC,project1user,BEGIN,execute <unnamed>: BEGIN
+2022-02-20 20:47:49.894 UTC,project1user,UPDATE,execute <unnamed>: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:47:49.895 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:49.994 UTC,project1user,BEGIN,execute <unnamed>: BEGIN
+2022-02-20 20:47:49.994 UTC,project1user,UPDATE,execute <unnamed>: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:47:49.995 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:50.094 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:50.094 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:47:50.096 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:50.194 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:50.194 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:47:50.195 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:50.293 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:50.293 UTC,project1user,SELECT,execute <unnamed>: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:47:50.295 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:50.394 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:50.394 UTC,project1user,UPDATE,execute <unnamed>: UPDATE item SET title = $1 WHERE i_id=$2
+2022-02-20 20:47:50.395 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:50.494 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:50.494 UTC,project1user,SELECT,execute <unnamed>: SELECT * FROM review r WHERE r.i_id=$1 ORDER BY creation_date DESC
+2022-02-20 20:47:50.495 UTC,project1user,SELECT,execute <unnamed>: SELECT * FROM trust t WHERE t.source_u_id=$1
+2022-02-20 20:47:50.496 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:50.594 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:50.594 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:47:50.595 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:50.694 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:50.694 UTC,project1user,UPDATE,execute <unnamed>: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:47:50.695 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:50.793 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:50.794 UTC,project1user,SELECT,"execute <unnamed>: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:47:50.796 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:50.893 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:50.894 UTC,project1user,UPDATE,execute S_4: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:47:50.895 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:50.994 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:50.994 UTC,project1user,SELECT,execute <unnamed>: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:47:50.996 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:51.094 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:51.094 UTC,project1user,SELECT,"execute <unnamed>: SELECT avg(rating) FROM review r, trust t WHERE r.u_id=t.target_u_id AND r.i_id=$1 AND t.source_u_id=$2"
+2022-02-20 20:47:51.096 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:51.194 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:51.195 UTC,project1user,UPDATE,execute <unnamed>: UPDATE review SET rating = $1 WHERE i_id=$2 AND u_id=$3
+2022-02-20 20:47:51.196 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:51.294 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:51.294 UTC,project1user,UPDATE,execute <unnamed>: UPDATE review SET rating = $1 WHERE i_id=$2 AND u_id=$3
+2022-02-20 20:47:51.296 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:51.394 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:51.394 UTC,project1user,SELECT,execute S_5: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:47:51.396 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:51.494 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:51.495 UTC,project1user,SELECT,"execute <unnamed>: SELECT avg(rating) FROM review r, trust t WHERE r.u_id=t.target_u_id AND r.i_id=$1 AND t.source_u_id=$2"
+2022-02-20 20:47:51.497 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:51.594 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:51.595 UTC,project1user,SELECT,execute S_5: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:47:51.596 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:51.693 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:51.694 UTC,project1user,SELECT,"execute <unnamed>: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:47:51.695 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:51.794 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:51.794 UTC,project1user,SELECT,execute <unnamed>: SELECT * FROM review r WHERE r.i_id=$1 ORDER BY creation_date DESC
+2022-02-20 20:47:51.796 UTC,project1user,SELECT,execute <unnamed>: SELECT * FROM trust t WHERE t.source_u_id=$1
+2022-02-20 20:47:51.796 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:51.894 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:51.894 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:47:51.895 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:51.995 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:51.995 UTC,project1user,SELECT,"execute <unnamed>: SELECT * FROM review r, useracct u WHERE u.u_id = r.u_id AND r.u_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:47:51.997 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:52.093 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:52.094 UTC,project1user,SELECT,"execute <unnamed>: SELECT avg(rating) FROM review r, trust t WHERE r.u_id=t.target_u_id AND r.i_id=$1 AND t.source_u_id=$2"
+2022-02-20 20:47:52.096 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:52.194 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:52.194 UTC,project1user,UPDATE,execute S_4: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:47:52.195 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:52.294 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:52.294 UTC,project1user,SELECT,execute <unnamed>: SELECT * FROM review r WHERE r.i_id=$1 ORDER BY creation_date DESC
+2022-02-20 20:47:52.296 UTC,project1user,SELECT,execute <unnamed>: SELECT * FROM trust t WHERE t.source_u_id=$1
+2022-02-20 20:47:52.297 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:52.394 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:52.394 UTC,project1user,UPDATE,execute <unnamed>: UPDATE item SET title = $1 WHERE i_id=$2
+2022-02-20 20:47:52.395 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:52.493 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:52.493 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:47:52.494 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:52.593 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:52.594 UTC,project1user,SELECT,"execute <unnamed>: SELECT * FROM review r, useracct u WHERE u.u_id = r.u_id AND r.u_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:47:52.595 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:52.694 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:52.694 UTC,project1user,UPDATE,execute <unnamed>: UPDATE review SET rating = $1 WHERE i_id=$2 AND u_id=$3
+2022-02-20 20:47:52.695 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:52.794 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:52.794 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:47:52.795 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:52.893 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:52.893 UTC,project1user,UPDATE,execute <unnamed>: UPDATE item SET title = $1 WHERE i_id=$2
+2022-02-20 20:47:52.894 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:52.993 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:52.994 UTC,project1user,SELECT,execute S_6: SELECT * FROM review r WHERE r.i_id=$1 ORDER BY creation_date DESC
+2022-02-20 20:47:52.995 UTC,project1user,SELECT,execute S_7: SELECT * FROM trust t WHERE t.source_u_id=$1
+2022-02-20 20:47:52.996 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:53.094 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:53.094 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:47:53.095 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:53.194 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:53.194 UTC,project1user,SELECT,"execute <unnamed>: SELECT * FROM review r, useracct u WHERE u.u_id = r.u_id AND r.u_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:47:53.196 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:53.294 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:53.294 UTC,project1user,UPDATE,execute S_4: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:47:53.295 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:53.393 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:53.393 UTC,project1user,SELECT,execute S_5: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:47:53.394 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:53.493 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:53.494 UTC,project1user,SELECT,execute S_6: SELECT * FROM review r WHERE r.i_id=$1 ORDER BY creation_date DESC
+2022-02-20 20:47:53.495 UTC,project1user,SELECT,execute S_7: SELECT * FROM trust t WHERE t.source_u_id=$1
+2022-02-20 20:47:53.495 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:53.593 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:53.594 UTC,project1user,UPDATE,execute S_8: UPDATE review SET rating = $1 WHERE i_id=$2 AND u_id=$3
+2022-02-20 20:47:53.595 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:53.693 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:53.694 UTC,project1user,SELECT,"execute <unnamed>: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:47:53.695 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:53.794 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:53.794 UTC,project1user,UPDATE,execute <unnamed>: UPDATE item SET title = $1 WHERE i_id=$2
+2022-02-20 20:47:53.795 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:53.894 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:53.894 UTC,project1user,UPDATE,execute S_4: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:47:53.895 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:53.993 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:53.994 UTC,project1user,UPDATE,execute S_9: UPDATE item SET title = $1 WHERE i_id=$2
+2022-02-20 20:47:53.994 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:54.093 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:54.094 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:47:54.096 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:54.195 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:54.195 UTC,project1user,UPDATE,execute S_9: UPDATE item SET title = $1 WHERE i_id=$2
+2022-02-20 20:47:54.196 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:54.294 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:54.294 UTC,project1user,SELECT,"execute <unnamed>: SELECT * FROM review r, useracct u WHERE u.u_id = r.u_id AND r.u_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:47:54.296 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:54.394 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:54.394 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:47:54.395 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:54.493 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:54.494 UTC,project1user,SELECT,"execute S_11: SELECT avg(rating) FROM review r, trust t WHERE r.u_id=t.target_u_id AND r.i_id=$1 AND t.source_u_id=$2"
+2022-02-20 20:47:54.496 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:54.594 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:54.594 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:47:54.596 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:54.694 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:54.694 UTC,project1user,SELECT,"execute S_11: SELECT avg(rating) FROM review r, trust t WHERE r.u_id=t.target_u_id AND r.i_id=$1 AND t.source_u_id=$2"
+2022-02-20 20:47:54.697 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:54.794 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:54.794 UTC,project1user,SELECT,execute S_5: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:47:54.796 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:54.893 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:54.893 UTC,project1user,UPDATE,execute S_9: UPDATE item SET title = $1 WHERE i_id=$2
+2022-02-20 20:47:54.894 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:54.994 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:54.994 UTC,project1user,UPDATE,execute S_9: UPDATE item SET title = $1 WHERE i_id=$2
+2022-02-20 20:47:54.994 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:55.094 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:55.094 UTC,project1user,SELECT,execute S_6: SELECT * FROM review r WHERE r.i_id=$1 ORDER BY creation_date DESC
+2022-02-20 20:47:55.096 UTC,project1user,SELECT,execute S_7: SELECT * FROM trust t WHERE t.source_u_id=$1
+2022-02-20 20:47:55.097 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:55.194 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:55.194 UTC,project1user,SELECT,execute S_5: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:47:55.196 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:55.293 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:55.293 UTC,project1user,SELECT,execute S_6: SELECT * FROM review r WHERE r.i_id=$1 ORDER BY creation_date DESC
+2022-02-20 20:47:55.295 UTC,project1user,SELECT,execute S_7: SELECT * FROM trust t WHERE t.source_u_id=$1
+2022-02-20 20:47:55.295 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:55.393 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:55.394 UTC,project1user,UPDATE,execute S_9: UPDATE item SET title = $1 WHERE i_id=$2
+2022-02-20 20:47:55.394 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:55.494 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:55.494 UTC,project1user,SELECT,execute S_6: SELECT * FROM review r WHERE r.i_id=$1 ORDER BY creation_date DESC
+2022-02-20 20:47:55.496 UTC,project1user,SELECT,execute S_7: SELECT * FROM trust t WHERE t.source_u_id=$1
+2022-02-20 20:47:55.497 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:55.594 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:55.594 UTC,project1user,SELECT,"execute S_12: SELECT * FROM review r, useracct u WHERE u.u_id = r.u_id AND r.u_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:47:55.596 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:55.694 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:55.694 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:47:55.695 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:55.793 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:55.794 UTC,project1user,SELECT,"execute S_11: SELECT avg(rating) FROM review r, trust t WHERE r.u_id=t.target_u_id AND r.i_id=$1 AND t.source_u_id=$2"
+2022-02-20 20:47:55.795 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:55.894 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:55.894 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:47:55.896 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:55.994 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:55.994 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:47:55.995 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:56.094 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:56.094 UTC,project1user,UPDATE,execute S_4: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:47:56.095 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:56.193 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:56.193 UTC,project1user,SELECT,"execute S_12: SELECT * FROM review r, useracct u WHERE u.u_id = r.u_id AND r.u_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:47:56.195 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:56.293 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:56.293 UTC,project1user,UPDATE,execute S_9: UPDATE item SET title = $1 WHERE i_id=$2
+2022-02-20 20:47:56.294 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:56.394 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:56.394 UTC,project1user,SELECT,execute S_6: SELECT * FROM review r WHERE r.i_id=$1 ORDER BY creation_date DESC
+2022-02-20 20:47:56.395 UTC,project1user,SELECT,execute S_7: SELECT * FROM trust t WHERE t.source_u_id=$1
+2022-02-20 20:47:56.396 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:56.494 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:56.494 UTC,project1user,SELECT,"execute S_12: SELECT * FROM review r, useracct u WHERE u.u_id = r.u_id AND r.u_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:47:56.496 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:56.594 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:56.594 UTC,project1user,SELECT,execute S_5: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:47:56.596 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:56.693 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:56.693 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:47:56.694 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:56.794 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:56.794 UTC,project1user,UPDATE,execute S_9: UPDATE item SET title = $1 WHERE i_id=$2
+2022-02-20 20:47:56.795 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:56.894 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:56.894 UTC,project1user,UPDATE,execute S_9: UPDATE item SET title = $1 WHERE i_id=$2
+2022-02-20 20:47:56.894 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:56.994 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:56.994 UTC,project1user,SELECT,execute S_5: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:47:56.995 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:57.093 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:57.093 UTC,project1user,UPDATE,execute S_4: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:47:57.094 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:57.193 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:57.193 UTC,project1user,SELECT,execute S_6: SELECT * FROM review r WHERE r.i_id=$1 ORDER BY creation_date DESC
+2022-02-20 20:47:57.195 UTC,project1user,SELECT,execute S_7: SELECT * FROM trust t WHERE t.source_u_id=$1
+2022-02-20 20:47:57.195 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:57.293 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:57.294 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:47:57.296 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:57.394 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:57.394 UTC,project1user,UPDATE,execute S_4: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:47:57.394 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:57.494 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:57.494 UTC,project1user,UPDATE,execute S_4: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:47:57.495 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:57.594 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:57.594 UTC,project1user,SELECT,"execute S_12: SELECT * FROM review r, useracct u WHERE u.u_id = r.u_id AND r.u_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:47:57.597 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:57.693 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:57.693 UTC,project1user,UPDATE,execute S_8: UPDATE review SET rating = $1 WHERE i_id=$2 AND u_id=$3
+2022-02-20 20:47:57.694 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:57.793 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:57.793 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:47:57.794 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:57.894 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:57.894 UTC,project1user,SELECT,execute S_5: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:47:57.895 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:57.994 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:57.994 UTC,project1user,UPDATE,execute S_4: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:47:57.995 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:58.094 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:58.094 UTC,project1user,UPDATE,execute S_9: UPDATE item SET title = $1 WHERE i_id=$2
+2022-02-20 20:47:58.095 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:58.193 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:58.193 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:47:58.195 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:58.294 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:58.294 UTC,project1user,SELECT,execute S_5: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:47:58.296 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:58.393 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:58.394 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:47:58.394 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:58.494 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:58.494 UTC,project1user,UPDATE,execute S_8: UPDATE review SET rating = $1 WHERE i_id=$2 AND u_id=$3
+2022-02-20 20:47:58.495 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:58.594 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:58.595 UTC,project1user,SELECT,"execute S_11: SELECT avg(rating) FROM review r, trust t WHERE r.u_id=t.target_u_id AND r.i_id=$1 AND t.source_u_id=$2"
+2022-02-20 20:47:58.596 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:58.693 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:58.693 UTC,project1user,UPDATE,execute S_4: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:47:58.694 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:58.793 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:58.794 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:47:58.796 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:58.894 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:58.894 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:47:58.895 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:58.994 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:58.994 UTC,project1user,SELECT,execute S_6: SELECT * FROM review r WHERE r.i_id=$1 ORDER BY creation_date DESC
+2022-02-20 20:47:58.995 UTC,project1user,SELECT,execute S_7: SELECT * FROM trust t WHERE t.source_u_id=$1
+2022-02-20 20:47:58.996 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:59.094 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:59.094 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:47:59.095 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:59.193 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:59.193 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:47:59.194 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:59.294 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:59.294 UTC,project1user,UPDATE,execute S_8: UPDATE review SET rating = $1 WHERE i_id=$2 AND u_id=$3
+2022-02-20 20:47:59.295 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:59.394 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:59.394 UTC,project1user,SELECT,execute S_6: SELECT * FROM review r WHERE r.i_id=$1 ORDER BY creation_date DESC
+2022-02-20 20:47:59.395 UTC,project1user,SELECT,execute S_7: SELECT * FROM trust t WHERE t.source_u_id=$1
+2022-02-20 20:47:59.396 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:59.494 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:59.494 UTC,project1user,SELECT,execute S_5: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:47:59.495 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:59.593 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:59.594 UTC,project1user,SELECT,"execute S_11: SELECT avg(rating) FROM review r, trust t WHERE r.u_id=t.target_u_id AND r.i_id=$1 AND t.source_u_id=$2"
+2022-02-20 20:47:59.595 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:59.693 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:59.694 UTC,project1user,SELECT,"execute S_11: SELECT avg(rating) FROM review r, trust t WHERE r.u_id=t.target_u_id AND r.i_id=$1 AND t.source_u_id=$2"
+2022-02-20 20:47:59.695 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:59.794 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:59.794 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:47:59.795 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:59.894 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:59.894 UTC,project1user,SELECT,"execute S_11: SELECT avg(rating) FROM review r, trust t WHERE r.u_id=t.target_u_id AND r.i_id=$1 AND t.source_u_id=$2"
+2022-02-20 20:47:59.896 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:47:59.994 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:47:59.994 UTC,project1user,SELECT,"execute S_12: SELECT * FROM review r, useracct u WHERE u.u_id = r.u_id AND r.u_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:47:59.996 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:00.093 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:00.093 UTC,project1user,SELECT,"execute S_12: SELECT * FROM review r, useracct u WHERE u.u_id = r.u_id AND r.u_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:00.095 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:00.194 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:00.194 UTC,project1user,UPDATE,execute S_8: UPDATE review SET rating = $1 WHERE i_id=$2 AND u_id=$3
+2022-02-20 20:48:00.195 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:00.294 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:00.294 UTC,project1user,UPDATE,execute S_4: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:48:00.294 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:00.394 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:00.394 UTC,project1user,SELECT,"execute S_11: SELECT avg(rating) FROM review r, trust t WHERE r.u_id=t.target_u_id AND r.i_id=$1 AND t.source_u_id=$2"
+2022-02-20 20:48:00.396 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:00.494 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:00.494 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:00.495 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:00.593 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:00.593 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:00.594 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:00.693 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:00.693 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:00.695 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:00.794 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:00.794 UTC,project1user,UPDATE,execute S_9: UPDATE item SET title = $1 WHERE i_id=$2
+2022-02-20 20:48:00.794 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:00.894 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:00.894 UTC,project1user,SELECT,"execute S_12: SELECT * FROM review r, useracct u WHERE u.u_id = r.u_id AND r.u_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:00.896 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:00.994 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:00.994 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:00.995 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:01.093 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:01.093 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:01.094 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:01.193 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:01.193 UTC,project1user,SELECT,"execute S_12: SELECT * FROM review r, useracct u WHERE u.u_id = r.u_id AND r.u_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:01.194 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:01.293 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:01.293 UTC,project1user,UPDATE,execute S_9: UPDATE item SET title = $1 WHERE i_id=$2
+2022-02-20 20:48:01.294 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:01.394 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:01.394 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:01.395 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:01.494 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:01.494 UTC,project1user,SELECT,"execute S_11: SELECT avg(rating) FROM review r, trust t WHERE r.u_id=t.target_u_id AND r.i_id=$1 AND t.source_u_id=$2"
+2022-02-20 20:48:01.495 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:01.594 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:01.594 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:01.595 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:01.693 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:01.693 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:01.695 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:01.793 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:01.793 UTC,project1user,UPDATE,execute S_4: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:48:01.794 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:01.893 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:01.894 UTC,project1user,SELECT,"execute S_12: SELECT * FROM review r, useracct u WHERE u.u_id = r.u_id AND r.u_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:01.895 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:01.994 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:01.994 UTC,project1user,SELECT,"execute S_11: SELECT avg(rating) FROM review r, trust t WHERE r.u_id=t.target_u_id AND r.i_id=$1 AND t.source_u_id=$2"
+2022-02-20 20:48:01.995 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:02.094 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:02.094 UTC,project1user,SELECT,"execute S_11: SELECT avg(rating) FROM review r, trust t WHERE r.u_id=t.target_u_id AND r.i_id=$1 AND t.source_u_id=$2"
+2022-02-20 20:48:02.095 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:02.193 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:02.193 UTC,project1user,SELECT,execute S_6: SELECT * FROM review r WHERE r.i_id=$1 ORDER BY creation_date DESC
+2022-02-20 20:48:02.195 UTC,project1user,SELECT,execute S_7: SELECT * FROM trust t WHERE t.source_u_id=$1
+2022-02-20 20:48:02.195 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:02.293 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:02.294 UTC,project1user,SELECT,"execute S_12: SELECT * FROM review r, useracct u WHERE u.u_id = r.u_id AND r.u_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:02.296 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:02.394 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:02.394 UTC,project1user,SELECT,execute S_6: SELECT * FROM review r WHERE r.i_id=$1 ORDER BY creation_date DESC
+2022-02-20 20:48:02.395 UTC,project1user,SELECT,execute S_7: SELECT * FROM trust t WHERE t.source_u_id=$1
+2022-02-20 20:48:02.395 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:02.494 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:02.494 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:02.496 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:02.593 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:02.593 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:02.594 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:02.695 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:02.699 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:02.700 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:02.793 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:02.793 UTC,project1user,UPDATE,execute S_4: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:48:02.794 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:02.894 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:02.894 UTC,project1user,SELECT,execute S_5: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:48:02.895 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:02.994 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:02.994 UTC,project1user,UPDATE,execute S_8: UPDATE review SET rating = $1 WHERE i_id=$2 AND u_id=$3
+2022-02-20 20:48:02.995 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:03.094 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:03.094 UTC,project1user,UPDATE,execute S_4: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:48:03.095 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:03.193 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:03.193 UTC,project1user,UPDATE,execute S_4: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:48:03.194 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:03.293 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:03.293 UTC,project1user,SELECT,execute S_5: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:48:03.295 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:03.393 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:03.394 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:03.395 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:03.494 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:03.494 UTC,project1user,SELECT,"execute S_12: SELECT * FROM review r, useracct u WHERE u.u_id = r.u_id AND r.u_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:03.495 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:03.594 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:03.594 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:03.595 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:03.693 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:03.693 UTC,project1user,SELECT,execute S_5: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:48:03.694 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:03.793 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:03.793 UTC,project1user,UPDATE,execute S_4: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:48:03.794 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:03.893 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:03.894 UTC,project1user,SELECT,execute S_6: SELECT * FROM review r WHERE r.i_id=$1 ORDER BY creation_date DESC
+2022-02-20 20:48:03.895 UTC,project1user,SELECT,execute S_7: SELECT * FROM trust t WHERE t.source_u_id=$1
+2022-02-20 20:48:03.895 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:03.994 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:03.994 UTC,project1user,UPDATE,execute S_8: UPDATE review SET rating = $1 WHERE i_id=$2 AND u_id=$3
+2022-02-20 20:48:03.995 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:04.094 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:04.094 UTC,project1user,UPDATE,execute S_4: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:48:04.095 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:04.193 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:04.193 UTC,project1user,UPDATE,execute S_4: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:48:04.194 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:04.293 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:04.293 UTC,project1user,UPDATE,execute S_8: UPDATE review SET rating = $1 WHERE i_id=$2 AND u_id=$3
+2022-02-20 20:48:04.295 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:04.393 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:04.394 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:04.394 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:04.494 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:04.494 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:04.496 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:04.594 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:04.594 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:04.595 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:04.694 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:04.694 UTC,project1user,SELECT,"execute S_11: SELECT avg(rating) FROM review r, trust t WHERE r.u_id=t.target_u_id AND r.i_id=$1 AND t.source_u_id=$2"
+2022-02-20 20:48:04.695 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:04.793 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:04.793 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:04.794 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:04.894 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:04.894 UTC,project1user,SELECT,"execute S_11: SELECT avg(rating) FROM review r, trust t WHERE r.u_id=t.target_u_id AND r.i_id=$1 AND t.source_u_id=$2"
+2022-02-20 20:48:04.896 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:04.994 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:04.994 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:04.995 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:05.093 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:05.093 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:05.094 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:05.193 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:05.194 UTC,project1user,SELECT,"execute S_12: SELECT * FROM review r, useracct u WHERE u.u_id = r.u_id AND r.u_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:05.195 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:05.294 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:05.294 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:05.295 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:05.394 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:05.394 UTC,project1user,SELECT,"execute S_11: SELECT avg(rating) FROM review r, trust t WHERE r.u_id=t.target_u_id AND r.i_id=$1 AND t.source_u_id=$2"
+2022-02-20 20:48:05.396 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:05.494 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:05.494 UTC,project1user,SELECT,execute S_6: SELECT * FROM review r WHERE r.i_id=$1 ORDER BY creation_date DESC
+2022-02-20 20:48:05.495 UTC,project1user,SELECT,execute S_7: SELECT * FROM trust t WHERE t.source_u_id=$1
+2022-02-20 20:48:05.496 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:05.593 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:05.593 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:05.594 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:05.693 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:05.693 UTC,project1user,SELECT,execute S_5: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:48:05.694 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:05.794 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:05.794 UTC,project1user,UPDATE,execute S_9: UPDATE item SET title = $1 WHERE i_id=$2
+2022-02-20 20:48:05.794 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:05.894 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:05.894 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:05.895 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:05.994 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:05.994 UTC,project1user,SELECT,execute S_5: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:48:05.995 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:06.093 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:06.093 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:06.094 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:06.193 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:06.193 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:06.194 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:06.294 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:06.294 UTC,project1user,SELECT,"execute S_11: SELECT avg(rating) FROM review r, trust t WHERE r.u_id=t.target_u_id AND r.i_id=$1 AND t.source_u_id=$2"
+2022-02-20 20:48:06.296 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:06.394 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:06.394 UTC,project1user,SELECT,execute S_5: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:48:06.395 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:06.494 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:06.494 UTC,project1user,SELECT,execute S_6: SELECT * FROM review r WHERE r.i_id=$1 ORDER BY creation_date DESC
+2022-02-20 20:48:06.495 UTC,project1user,SELECT,execute S_7: SELECT * FROM trust t WHERE t.source_u_id=$1
+2022-02-20 20:48:06.498 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:06.593 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:06.593 UTC,project1user,SELECT,"execute S_11: SELECT avg(rating) FROM review r, trust t WHERE r.u_id=t.target_u_id AND r.i_id=$1 AND t.source_u_id=$2"
+2022-02-20 20:48:06.594 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:06.693 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:06.693 UTC,project1user,SELECT,execute S_5: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:48:06.695 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:06.793 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:06.793 UTC,project1user,SELECT,execute S_5: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:48:06.795 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:06.894 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:06.894 UTC,project1user,SELECT,"execute S_11: SELECT avg(rating) FROM review r, trust t WHERE r.u_id=t.target_u_id AND r.i_id=$1 AND t.source_u_id=$2"
+2022-02-20 20:48:06.895 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:06.994 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:06.994 UTC,project1user,SELECT,execute S_6: SELECT * FROM review r WHERE r.i_id=$1 ORDER BY creation_date DESC
+2022-02-20 20:48:06.995 UTC,project1user,SELECT,execute S_7: SELECT * FROM trust t WHERE t.source_u_id=$1
+2022-02-20 20:48:06.996 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:07.093 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:07.093 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:07.094 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:07.193 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:07.193 UTC,project1user,SELECT,execute S_6: SELECT * FROM review r WHERE r.i_id=$1 ORDER BY creation_date DESC
+2022-02-20 20:48:07.195 UTC,project1user,SELECT,execute S_7: SELECT * FROM trust t WHERE t.source_u_id=$1
+2022-02-20 20:48:07.195 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:07.293 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:07.293 UTC,project1user,SELECT,"execute S_12: SELECT * FROM review r, useracct u WHERE u.u_id = r.u_id AND r.u_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:07.295 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:07.394 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:07.394 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:07.395 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:07.494 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:07.494 UTC,project1user,UPDATE,execute S_8: UPDATE review SET rating = $1 WHERE i_id=$2 AND u_id=$3
+2022-02-20 20:48:07.495 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:07.594 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:07.594 UTC,project1user,SELECT,execute S_5: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:48:07.595 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:07.693 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:07.693 UTC,project1user,SELECT,execute S_6: SELECT * FROM review r WHERE r.i_id=$1 ORDER BY creation_date DESC
+2022-02-20 20:48:07.694 UTC,project1user,SELECT,execute S_7: SELECT * FROM trust t WHERE t.source_u_id=$1
+2022-02-20 20:48:07.695 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:07.793 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:07.793 UTC,project1user,SELECT,"execute S_12: SELECT * FROM review r, useracct u WHERE u.u_id = r.u_id AND r.u_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:07.795 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:07.893 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:07.893 UTC,project1user,SELECT,execute S_5: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:48:07.895 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:07.994 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:07.994 UTC,project1user,SELECT,"execute S_12: SELECT * FROM review r, useracct u WHERE u.u_id = r.u_id AND r.u_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:07.995 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:08.094 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:08.094 UTC,project1user,UPDATE,execute S_9: UPDATE item SET title = $1 WHERE i_id=$2
+2022-02-20 20:48:08.094 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:08.194 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:08.194 UTC,project1user,SELECT,execute S_5: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:48:08.196 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:08.293 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:08.293 UTC,project1user,UPDATE,execute S_9: UPDATE item SET title = $1 WHERE i_id=$2
+2022-02-20 20:48:08.294 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:08.393 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:08.393 UTC,project1user,SELECT,"execute S_11: SELECT avg(rating) FROM review r, trust t WHERE r.u_id=t.target_u_id AND r.i_id=$1 AND t.source_u_id=$2"
+2022-02-20 20:48:08.395 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:08.494 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:08.494 UTC,project1user,SELECT,execute S_5: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:48:08.495 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:08.594 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:08.594 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:08.595 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:08.693 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:08.693 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:08.694 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:08.793 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:08.793 UTC,project1user,SELECT,"execute S_12: SELECT * FROM review r, useracct u WHERE u.u_id = r.u_id AND r.u_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:08.795 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:08.894 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:08.894 UTC,project1user,UPDATE,execute S_8: UPDATE review SET rating = $1 WHERE i_id=$2 AND u_id=$3
+2022-02-20 20:48:08.895 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:08.994 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:08.994 UTC,project1user,UPDATE,execute S_8: UPDATE review SET rating = $1 WHERE i_id=$2 AND u_id=$3
+2022-02-20 20:48:08.995 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:09.094 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:09.094 UTC,project1user,UPDATE,execute S_4: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:48:09.095 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:09.193 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:09.193 UTC,project1user,SELECT,"execute S_11: SELECT avg(rating) FROM review r, trust t WHERE r.u_id=t.target_u_id AND r.i_id=$1 AND t.source_u_id=$2"
+2022-02-20 20:48:09.194 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:09.293 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:09.293 UTC,project1user,SELECT,execute S_6: SELECT * FROM review r WHERE r.i_id=$1 ORDER BY creation_date DESC
+2022-02-20 20:48:09.295 UTC,project1user,SELECT,execute S_7: SELECT * FROM trust t WHERE t.source_u_id=$1
+2022-02-20 20:48:09.295 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:09.393 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:09.394 UTC,project1user,UPDATE,execute S_4: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:48:09.394 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:09.493 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:09.494 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:09.494 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:09.594 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:09.594 UTC,project1user,UPDATE,execute S_8: UPDATE review SET rating = $1 WHERE i_id=$2 AND u_id=$3
+2022-02-20 20:48:09.595 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:09.694 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:09.694 UTC,project1user,SELECT,execute S_6: SELECT * FROM review r WHERE r.i_id=$1 ORDER BY creation_date DESC
+2022-02-20 20:48:09.695 UTC,project1user,SELECT,execute S_7: SELECT * FROM trust t WHERE t.source_u_id=$1
+2022-02-20 20:48:09.695 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:09.793 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:09.793 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:09.794 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:09.893 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:09.893 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:09.895 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:09.994 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:09.994 UTC,project1user,SELECT,"execute S_12: SELECT * FROM review r, useracct u WHERE u.u_id = r.u_id AND r.u_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:09.995 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:10.094 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:10.094 UTC,project1user,SELECT,"execute S_12: SELECT * FROM review r, useracct u WHERE u.u_id = r.u_id AND r.u_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:10.096 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:10.194 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:10.194 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:10.196 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:10.293 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:10.293 UTC,project1user,UPDATE,execute S_4: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:48:10.294 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:10.393 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:10.393 UTC,project1user,SELECT,execute S_6: SELECT * FROM review r WHERE r.i_id=$1 ORDER BY creation_date DESC
+2022-02-20 20:48:10.395 UTC,project1user,SELECT,execute S_7: SELECT * FROM trust t WHERE t.source_u_id=$1
+2022-02-20 20:48:10.395 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:10.493 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:10.493 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:10.495 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:10.594 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:10.594 UTC,project1user,SELECT,"execute S_12: SELECT * FROM review r, useracct u WHERE u.u_id = r.u_id AND r.u_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:10.596 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:10.694 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:10.694 UTC,project1user,UPDATE,execute S_4: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:48:10.694 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:10.793 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:10.793 UTC,project1user,SELECT,"execute S_12: SELECT * FROM review r, useracct u WHERE u.u_id = r.u_id AND r.u_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:10.794 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:10.893 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:10.893 UTC,project1user,SELECT,"execute S_11: SELECT avg(rating) FROM review r, trust t WHERE r.u_id=t.target_u_id AND r.i_id=$1 AND t.source_u_id=$2"
+2022-02-20 20:48:10.896 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:10.994 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:10.994 UTC,project1user,UPDATE,execute S_4: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:48:10.994 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:11.094 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:11.094 UTC,project1user,SELECT,execute S_5: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:48:11.095 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:11.193 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:11.193 UTC,project1user,SELECT,"execute S_11: SELECT avg(rating) FROM review r, trust t WHERE r.u_id=t.target_u_id AND r.i_id=$1 AND t.source_u_id=$2"
+2022-02-20 20:48:11.195 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:11.293 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:11.293 UTC,project1user,UPDATE,execute S_4: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:48:11.294 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:11.394 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:11.394 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:11.394 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:11.494 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:11.494 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:11.495 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:11.593 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:11.593 UTC,project1user,UPDATE,execute S_4: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:48:11.594 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:11.693 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:11.693 UTC,project1user,UPDATE,execute S_4: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:48:11.694 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:11.793 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:11.793 UTC,project1user,UPDATE,execute S_9: UPDATE item SET title = $1 WHERE i_id=$2
+2022-02-20 20:48:11.794 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:11.894 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:11.894 UTC,project1user,UPDATE,execute S_9: UPDATE item SET title = $1 WHERE i_id=$2
+2022-02-20 20:48:11.894 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:11.994 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:11.994 UTC,project1user,UPDATE,execute S_8: UPDATE review SET rating = $1 WHERE i_id=$2 AND u_id=$3
+2022-02-20 20:48:11.996 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:12.094 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:12.094 UTC,project1user,UPDATE,execute S_9: UPDATE item SET title = $1 WHERE i_id=$2
+2022-02-20 20:48:12.095 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:12.193 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:12.194 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:12.196 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:12.294 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:12.294 UTC,project1user,UPDATE,execute S_9: UPDATE item SET title = $1 WHERE i_id=$2
+2022-02-20 20:48:12.294 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:12.394 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:12.394 UTC,project1user,SELECT,execute S_6: SELECT * FROM review r WHERE r.i_id=$1 ORDER BY creation_date DESC
+2022-02-20 20:48:12.395 UTC,project1user,SELECT,execute S_7: SELECT * FROM trust t WHERE t.source_u_id=$1
+2022-02-20 20:48:12.395 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:12.494 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:12.494 UTC,project1user,SELECT,execute S_5: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:48:12.496 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:12.593 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:12.593 UTC,project1user,SELECT,"execute S_12: SELECT * FROM review r, useracct u WHERE u.u_id = r.u_id AND r.u_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:12.594 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:12.693 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:12.693 UTC,project1user,SELECT,execute S_6: SELECT * FROM review r WHERE r.i_id=$1 ORDER BY creation_date DESC
+2022-02-20 20:48:12.694 UTC,project1user,SELECT,execute S_7: SELECT * FROM trust t WHERE t.source_u_id=$1
+2022-02-20 20:48:12.695 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:12.794 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:12.794 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:12.795 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:12.894 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:12.894 UTC,project1user,SELECT,"execute S_11: SELECT avg(rating) FROM review r, trust t WHERE r.u_id=t.target_u_id AND r.i_id=$1 AND t.source_u_id=$2"
+2022-02-20 20:48:12.896 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:12.993 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:12.993 UTC,project1user,UPDATE,execute S_9: UPDATE item SET title = $1 WHERE i_id=$2
+2022-02-20 20:48:12.994 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:13.093 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:13.093 UTC,project1user,UPDATE,execute S_9: UPDATE item SET title = $1 WHERE i_id=$2
+2022-02-20 20:48:13.094 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:13.194 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:13.194 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:13.196 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:13.294 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:13.294 UTC,project1user,UPDATE,execute S_9: UPDATE item SET title = $1 WHERE i_id=$2
+2022-02-20 20:48:13.294 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:13.393 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:13.393 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:13.394 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:13.493 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:13.493 UTC,project1user,SELECT,"execute S_11: SELECT avg(rating) FROM review r, trust t WHERE r.u_id=t.target_u_id AND r.i_id=$1 AND t.source_u_id=$2"
+2022-02-20 20:48:13.495 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:13.593 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:13.593 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:13.594 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:13.693 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:13.694 UTC,project1user,SELECT,"execute S_12: SELECT * FROM review r, useracct u WHERE u.u_id = r.u_id AND r.u_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:13.695 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:13.794 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:13.794 UTC,project1user,SELECT,execute S_6: SELECT * FROM review r WHERE r.i_id=$1 ORDER BY creation_date DESC
+2022-02-20 20:48:13.795 UTC,project1user,SELECT,execute S_7: SELECT * FROM trust t WHERE t.source_u_id=$1
+2022-02-20 20:48:13.796 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:13.894 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:13.894 UTC,project1user,UPDATE,execute S_4: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:48:13.894 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:13.993 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:13.993 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:13.994 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:14.093 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:14.093 UTC,project1user,UPDATE,execute S_4: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:48:14.094 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:14.194 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:14.194 UTC,project1user,UPDATE,execute S_4: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:48:14.194 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:14.294 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:14.294 UTC,project1user,UPDATE,execute S_9: UPDATE item SET title = $1 WHERE i_id=$2
+2022-02-20 20:48:14.294 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:14.393 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:14.393 UTC,project1user,UPDATE,execute S_4: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:48:14.394 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:14.493 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:14.493 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:14.496 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:14.594 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:14.594 UTC,project1user,UPDATE,execute S_4: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:48:14.594 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:14.694 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:14.694 UTC,project1user,SELECT,execute S_6: SELECT * FROM review r WHERE r.i_id=$1 ORDER BY creation_date DESC
+2022-02-20 20:48:14.695 UTC,project1user,SELECT,execute S_7: SELECT * FROM trust t WHERE t.source_u_id=$1
+2022-02-20 20:48:14.695 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:14.794 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:14.794 UTC,project1user,SELECT,"execute S_12: SELECT * FROM review r, useracct u WHERE u.u_id = r.u_id AND r.u_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:14.796 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:14.893 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:14.893 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:14.894 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:14.993 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:14.993 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:14.994 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:15.094 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:15.094 UTC,project1user,SELECT,"execute S_12: SELECT * FROM review r, useracct u WHERE u.u_id = r.u_id AND r.u_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:15.095 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:15.194 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:15.194 UTC,project1user,SELECT,"execute S_12: SELECT * FROM review r, useracct u WHERE u.u_id = r.u_id AND r.u_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:15.195 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:15.293 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:15.293 UTC,project1user,SELECT,"execute S_11: SELECT avg(rating) FROM review r, trust t WHERE r.u_id=t.target_u_id AND r.i_id=$1 AND t.source_u_id=$2"
+2022-02-20 20:48:15.294 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:15.393 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:15.393 UTC,project1user,SELECT,execute S_5: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:48:15.395 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:15.493 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:15.493 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:15.494 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:15.594 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:15.594 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:15.594 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:15.694 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:15.694 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:15.695 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:15.794 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:15.794 UTC,project1user,SELECT,execute S_5: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:48:15.796 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:15.893 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:15.893 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:15.894 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:15.993 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:15.993 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:15.994 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:16.094 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:16.094 UTC,project1user,SELECT,execute S_5: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:48:16.095 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:16.194 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:16.194 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:16.196 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:16.293 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:16.293 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:16.295 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:16.393 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:16.393 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:16.394 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:16.494 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:16.494 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:16.495 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:16.594 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:16.594 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:16.595 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:16.694 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:16.694 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:16.695 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:16.793 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:16.793 UTC,project1user,UPDATE,execute S_8: UPDATE review SET rating = $1 WHERE i_id=$2 AND u_id=$3
+2022-02-20 20:48:16.794 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:16.893 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:16.894 UTC,project1user,UPDATE,execute S_8: UPDATE review SET rating = $1 WHERE i_id=$2 AND u_id=$3
+2022-02-20 20:48:16.895 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:16.993 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:16.994 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:16.994 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:17.094 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:17.094 UTC,project1user,SELECT,execute S_5: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:48:17.095 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:17.194 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:17.194 UTC,project1user,SELECT,execute S_6: SELECT * FROM review r WHERE r.i_id=$1 ORDER BY creation_date DESC
+2022-02-20 20:48:17.195 UTC,project1user,SELECT,execute S_7: SELECT * FROM trust t WHERE t.source_u_id=$1
+2022-02-20 20:48:17.196 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:17.293 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:17.293 UTC,project1user,UPDATE,execute S_8: UPDATE review SET rating = $1 WHERE i_id=$2 AND u_id=$3
+2022-02-20 20:48:17.294 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:17.393 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:17.393 UTC,project1user,SELECT,execute S_5: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:48:17.395 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:17.493 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:17.493 UTC,project1user,SELECT,execute S_5: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:48:17.495 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:17.594 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:17.594 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:17.595 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:17.693 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:17.693 UTC,project1user,SELECT,execute S_5: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:48:17.694 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:17.793 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:17.793 UTC,project1user,UPDATE,execute S_9: UPDATE item SET title = $1 WHERE i_id=$2
+2022-02-20 20:48:17.794 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:17.894 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:17.894 UTC,project1user,SELECT,"execute S_11: SELECT avg(rating) FROM review r, trust t WHERE r.u_id=t.target_u_id AND r.i_id=$1 AND t.source_u_id=$2"
+2022-02-20 20:48:17.896 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:17.994 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:17.994 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:17.995 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:18.094 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:18.094 UTC,project1user,SELECT,execute S_5: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:48:18.095 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:18.193 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:18.193 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:18.195 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:18.293 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:18.293 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:18.294 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:18.394 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:18.394 UTC,project1user,UPDATE,execute S_4: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:48:18.394 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:18.494 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:18.494 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:18.495 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:18.593 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:18.593 UTC,project1user,SELECT,execute S_6: SELECT * FROM review r WHERE r.i_id=$1 ORDER BY creation_date DESC
+2022-02-20 20:48:18.594 UTC,project1user,SELECT,execute S_7: SELECT * FROM trust t WHERE t.source_u_id=$1
+2022-02-20 20:48:18.595 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:18.693 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:18.693 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:18.694 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:18.793 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:18.793 UTC,project1user,UPDATE,execute S_8: UPDATE review SET rating = $1 WHERE i_id=$2 AND u_id=$3
+2022-02-20 20:48:18.795 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:18.894 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:18.894 UTC,project1user,UPDATE,execute S_8: UPDATE review SET rating = $1 WHERE i_id=$2 AND u_id=$3
+2022-02-20 20:48:18.895 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:18.994 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:18.994 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:18.994 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:19.094 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:19.094 UTC,project1user,SELECT,execute S_5: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:48:19.095 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:19.193 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:19.193 UTC,project1user,UPDATE,execute S_9: UPDATE item SET title = $1 WHERE i_id=$2
+2022-02-20 20:48:19.198 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:19.293 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:19.293 UTC,project1user,SELECT,"execute S_12: SELECT * FROM review r, useracct u WHERE u.u_id = r.u_id AND r.u_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:19.295 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:19.393 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:19.393 UTC,project1user,UPDATE,execute S_4: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:48:19.394 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:19.493 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:19.494 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:19.495 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:19.594 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:19.594 UTC,project1user,UPDATE,execute S_9: UPDATE item SET title = $1 WHERE i_id=$2
+2022-02-20 20:48:19.595 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:19.693 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:19.693 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:19.694 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:19.793 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:19.793 UTC,project1user,SELECT,"execute S_12: SELECT * FROM review r, useracct u WHERE u.u_id = r.u_id AND r.u_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:19.794 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:19.893 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:19.893 UTC,project1user,UPDATE,execute S_4: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:48:19.894 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:19.993 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:19.994 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:19.994 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:20.094 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:20.094 UTC,project1user,UPDATE,execute S_4: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:48:20.095 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:20.194 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:20.194 UTC,project1user,UPDATE,execute S_9: UPDATE item SET title = $1 WHERE i_id=$2
+2022-02-20 20:48:20.194 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:20.293 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:20.293 UTC,project1user,UPDATE,execute S_9: UPDATE item SET title = $1 WHERE i_id=$2
+2022-02-20 20:48:20.294 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:20.393 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:20.393 UTC,project1user,SELECT,execute S_5: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:48:20.394 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:20.493 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:20.493 UTC,project1user,SELECT,"execute S_12: SELECT * FROM review r, useracct u WHERE u.u_id = r.u_id AND r.u_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:20.495 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:20.594 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:20.594 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:20.595 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:20.694 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:20.694 UTC,project1user,UPDATE,execute S_8: UPDATE review SET rating = $1 WHERE i_id=$2 AND u_id=$3
+2022-02-20 20:48:20.695 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:20.794 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:20.794 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:20.795 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:20.893 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:20.893 UTC,project1user,UPDATE,execute S_8: UPDATE review SET rating = $1 WHERE i_id=$2 AND u_id=$3
+2022-02-20 20:48:20.896 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:20.993 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:20.994 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:20.995 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:21.094 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:21.094 UTC,project1user,SELECT,"execute S_12: SELECT * FROM review r, useracct u WHERE u.u_id = r.u_id AND r.u_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:21.096 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:21.194 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:21.194 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:21.196 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:21.294 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:21.294 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:21.295 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:21.393 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:21.393 UTC,project1user,SELECT,execute S_5: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:48:21.395 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:21.493 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:21.493 UTC,project1user,SELECT,execute S_6: SELECT * FROM review r WHERE r.i_id=$1 ORDER BY creation_date DESC
+2022-02-20 20:48:21.494 UTC,project1user,SELECT,execute S_7: SELECT * FROM trust t WHERE t.source_u_id=$1
+2022-02-20 20:48:21.495 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:21.593 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:21.594 UTC,project1user,SELECT,"execute S_12: SELECT * FROM review r, useracct u WHERE u.u_id = r.u_id AND r.u_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:21.595 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:21.693 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:21.694 UTC,project1user,SELECT,"execute S_11: SELECT avg(rating) FROM review r, trust t WHERE r.u_id=t.target_u_id AND r.i_id=$1 AND t.source_u_id=$2"
+2022-02-20 20:48:21.695 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:21.794 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:21.794 UTC,project1user,SELECT,"execute S_11: SELECT avg(rating) FROM review r, trust t WHERE r.u_id=t.target_u_id AND r.i_id=$1 AND t.source_u_id=$2"
+2022-02-20 20:48:21.796 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:21.893 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:21.893 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:21.894 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:21.993 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:21.993 UTC,project1user,UPDATE,execute S_4: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:48:21.994 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:22.093 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:22.093 UTC,project1user,SELECT,execute S_5: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:48:22.095 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:22.194 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:22.194 UTC,project1user,SELECT,"execute S_12: SELECT * FROM review r, useracct u WHERE u.u_id = r.u_id AND r.u_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:22.196 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:22.294 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:22.294 UTC,project1user,UPDATE,execute S_8: UPDATE review SET rating = $1 WHERE i_id=$2 AND u_id=$3
+2022-02-20 20:48:22.295 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:22.394 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:22.394 UTC,project1user,SELECT,"execute S_11: SELECT avg(rating) FROM review r, trust t WHERE r.u_id=t.target_u_id AND r.i_id=$1 AND t.source_u_id=$2"
+2022-02-20 20:48:22.396 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:22.493 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:22.493 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:22.494 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:22.593 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:22.593 UTC,project1user,SELECT,execute S_6: SELECT * FROM review r WHERE r.i_id=$1 ORDER BY creation_date DESC
+2022-02-20 20:48:22.595 UTC,project1user,SELECT,execute S_7: SELECT * FROM trust t WHERE t.source_u_id=$1
+2022-02-20 20:48:22.595 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:22.693 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:22.693 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:22.694 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:22.794 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:22.794 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:22.795 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:22.894 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:22.894 UTC,project1user,SELECT,"execute S_11: SELECT avg(rating) FROM review r, trust t WHERE r.u_id=t.target_u_id AND r.i_id=$1 AND t.source_u_id=$2"
+2022-02-20 20:48:22.896 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:22.993 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:22.993 UTC,project1user,SELECT,execute S_6: SELECT * FROM review r WHERE r.i_id=$1 ORDER BY creation_date DESC
+2022-02-20 20:48:22.994 UTC,project1user,SELECT,execute S_7: SELECT * FROM trust t WHERE t.source_u_id=$1
+2022-02-20 20:48:22.995 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:23.093 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:23.093 UTC,project1user,SELECT,execute S_5: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:48:23.094 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:23.193 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:23.193 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:23.194 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:23.294 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:23.294 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:23.295 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:23.394 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:23.394 UTC,project1user,SELECT,"execute S_12: SELECT * FROM review r, useracct u WHERE u.u_id = r.u_id AND r.u_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:23.396 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:23.494 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:23.494 UTC,project1user,SELECT,execute S_5: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:48:23.496 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:23.593 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:23.593 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:23.594 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:23.693 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:23.693 UTC,project1user,SELECT,"execute S_11: SELECT avg(rating) FROM review r, trust t WHERE r.u_id=t.target_u_id AND r.i_id=$1 AND t.source_u_id=$2"
+2022-02-20 20:48:23.695 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:23.794 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:23.794 UTC,project1user,UPDATE,execute S_4: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:48:23.795 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:23.894 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:23.894 UTC,project1user,SELECT,"execute S_11: SELECT avg(rating) FROM review r, trust t WHERE r.u_id=t.target_u_id AND r.i_id=$1 AND t.source_u_id=$2"
+2022-02-20 20:48:23.896 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:23.994 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:23.994 UTC,project1user,SELECT,"execute S_12: SELECT * FROM review r, useracct u WHERE u.u_id = r.u_id AND r.u_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:23.996 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:24.093 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:24.093 UTC,project1user,UPDATE,execute S_9: UPDATE item SET title = $1 WHERE i_id=$2
+2022-02-20 20:48:24.093 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:24.193 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:24.194 UTC,project1user,UPDATE,execute S_9: UPDATE item SET title = $1 WHERE i_id=$2
+2022-02-20 20:48:24.194 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:24.293 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:24.293 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:24.295 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:24.394 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:24.394 UTC,project1user,UPDATE,execute S_4: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:48:24.394 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:24.494 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:24.494 UTC,project1user,SELECT,"execute S_12: SELECT * FROM review r, useracct u WHERE u.u_id = r.u_id AND r.u_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:24.496 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:24.593 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:24.593 UTC,project1user,UPDATE,execute S_4: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:48:24.594 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:24.693 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:24.693 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:24.695 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:24.794 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:24.794 UTC,project1user,SELECT,execute S_6: SELECT * FROM review r WHERE r.i_id=$1 ORDER BY creation_date DESC
+2022-02-20 20:48:24.795 UTC,project1user,SELECT,execute S_7: SELECT * FROM trust t WHERE t.source_u_id=$1
+2022-02-20 20:48:24.796 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:24.894 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:24.894 UTC,project1user,UPDATE,execute S_9: UPDATE item SET title = $1 WHERE i_id=$2
+2022-02-20 20:48:24.894 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:24.994 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:24.994 UTC,project1user,SELECT,execute S_6: SELECT * FROM review r WHERE r.i_id=$1 ORDER BY creation_date DESC
+2022-02-20 20:48:24.996 UTC,project1user,SELECT,execute S_7: SELECT * FROM trust t WHERE t.source_u_id=$1
+2022-02-20 20:48:24.997 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:25.093 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:25.093 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:25.094 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:25.193 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:25.193 UTC,project1user,UPDATE,execute S_9: UPDATE item SET title = $1 WHERE i_id=$2
+2022-02-20 20:48:25.194 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:25.293 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:25.294 UTC,project1user,SELECT,"execute S_12: SELECT * FROM review r, useracct u WHERE u.u_id = r.u_id AND r.u_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:25.296 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:25.394 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:25.394 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:25.396 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:25.494 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:25.494 UTC,project1user,SELECT,"execute S_12: SELECT * FROM review r, useracct u WHERE u.u_id = r.u_id AND r.u_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:25.495 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:25.594 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:25.594 UTC,project1user,SELECT,"execute S_11: SELECT avg(rating) FROM review r, trust t WHERE r.u_id=t.target_u_id AND r.i_id=$1 AND t.source_u_id=$2"
+2022-02-20 20:48:25.596 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:25.693 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:25.693 UTC,project1user,SELECT,execute S_6: SELECT * FROM review r WHERE r.i_id=$1 ORDER BY creation_date DESC
+2022-02-20 20:48:25.695 UTC,project1user,SELECT,execute S_7: SELECT * FROM trust t WHERE t.source_u_id=$1
+2022-02-20 20:48:25.696 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:25.793 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:25.793 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:25.795 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:25.893 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:25.894 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:25.895 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:25.994 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:25.994 UTC,project1user,UPDATE,execute S_4: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:48:25.994 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:26.094 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:26.094 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:26.094 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:26.193 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:26.193 UTC,project1user,UPDATE,execute S_9: UPDATE item SET title = $1 WHERE i_id=$2
+2022-02-20 20:48:26.194 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:26.293 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:26.293 UTC,project1user,SELECT,"execute S_12: SELECT * FROM review r, useracct u WHERE u.u_id = r.u_id AND r.u_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:26.294 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:26.393 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:26.393 UTC,project1user,SELECT,execute S_5: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:48:26.395 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:26.493 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:26.494 UTC,project1user,UPDATE,execute S_9: UPDATE item SET title = $1 WHERE i_id=$2
+2022-02-20 20:48:26.494 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:26.594 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:26.594 UTC,project1user,SELECT,execute S_5: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:48:26.595 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:26.694 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:26.694 UTC,project1user,SELECT,execute S_5: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:48:26.695 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:26.793 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:26.793 UTC,project1user,UPDATE,execute S_9: UPDATE item SET title = $1 WHERE i_id=$2
+2022-02-20 20:48:26.794 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:26.893 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:26.893 UTC,project1user,UPDATE,execute S_4: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:48:26.894 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:26.993 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:26.993 UTC,project1user,UPDATE,execute S_9: UPDATE item SET title = $1 WHERE i_id=$2
+2022-02-20 20:48:26.994 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:27.094 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:27.094 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:27.094 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:27.194 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:27.194 UTC,project1user,UPDATE,execute S_4: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:48:27.195 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:27.293 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:27.293 UTC,project1user,SELECT,execute S_6: SELECT * FROM review r WHERE r.i_id=$1 ORDER BY creation_date DESC
+2022-02-20 20:48:27.294 UTC,project1user,SELECT,execute S_7: SELECT * FROM trust t WHERE t.source_u_id=$1
+2022-02-20 20:48:27.295 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:27.393 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:27.393 UTC,project1user,UPDATE,execute S_8: UPDATE review SET rating = $1 WHERE i_id=$2 AND u_id=$3
+2022-02-20 20:48:27.395 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:27.493 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:27.493 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:27.495 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:27.599 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:27.599 UTC,project1user,SELECT,execute S_5: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:48:27.600 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:27.693 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:27.694 UTC,project1user,UPDATE,execute S_8: UPDATE review SET rating = $1 WHERE i_id=$2 AND u_id=$3
+2022-02-20 20:48:27.696 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:27.794 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:27.794 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:27.795 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:27.894 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:27.894 UTC,project1user,SELECT,"execute S_12: SELECT * FROM review r, useracct u WHERE u.u_id = r.u_id AND r.u_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:27.896 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:27.993 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:27.993 UTC,project1user,UPDATE,execute S_9: UPDATE item SET title = $1 WHERE i_id=$2
+2022-02-20 20:48:27.993 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:28.093 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:28.093 UTC,project1user,SELECT,execute S_6: SELECT * FROM review r WHERE r.i_id=$1 ORDER BY creation_date DESC
+2022-02-20 20:48:28.094 UTC,project1user,SELECT,execute S_7: SELECT * FROM trust t WHERE t.source_u_id=$1
+2022-02-20 20:48:28.095 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:28.193 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:28.193 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:28.195 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:28.294 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:28.294 UTC,project1user,SELECT,"execute S_12: SELECT * FROM review r, useracct u WHERE u.u_id = r.u_id AND r.u_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:28.296 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:28.394 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:28.394 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:28.395 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:28.494 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:28.494 UTC,project1user,SELECT,execute S_5: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:48:28.495 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:28.593 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:28.593 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:28.594 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:28.693 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:28.693 UTC,project1user,SELECT,"execute S_11: SELECT avg(rating) FROM review r, trust t WHERE r.u_id=t.target_u_id AND r.i_id=$1 AND t.source_u_id=$2"
+2022-02-20 20:48:28.696 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:28.793 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:28.793 UTC,project1user,SELECT,execute S_5: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:48:28.795 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:28.894 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:28.894 UTC,project1user,SELECT,execute S_6: SELECT * FROM review r WHERE r.i_id=$1 ORDER BY creation_date DESC
+2022-02-20 20:48:28.895 UTC,project1user,SELECT,execute S_7: SELECT * FROM trust t WHERE t.source_u_id=$1
+2022-02-20 20:48:28.896 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:28.994 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:28.994 UTC,project1user,UPDATE,execute S_4: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:48:28.995 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:29.093 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:29.093 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:29.094 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:29.193 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:29.193 UTC,project1user,SELECT,execute S_6: SELECT * FROM review r WHERE r.i_id=$1 ORDER BY creation_date DESC
+2022-02-20 20:48:29.195 UTC,project1user,SELECT,execute S_7: SELECT * FROM trust t WHERE t.source_u_id=$1
+2022-02-20 20:48:29.196 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:29.293 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:29.293 UTC,project1user,UPDATE,execute S_8: UPDATE review SET rating = $1 WHERE i_id=$2 AND u_id=$3
+2022-02-20 20:48:29.295 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:29.394 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:29.394 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:29.394 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:29.494 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:29.494 UTC,project1user,SELECT,execute S_6: SELECT * FROM review r WHERE r.i_id=$1 ORDER BY creation_date DESC
+2022-02-20 20:48:29.495 UTC,project1user,SELECT,execute S_7: SELECT * FROM trust t WHERE t.source_u_id=$1
+2022-02-20 20:48:29.495 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:29.594 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:29.594 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:29.595 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:29.693 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:29.693 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:29.695 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:29.793 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:29.793 UTC,project1user,SELECT,execute S_6: SELECT * FROM review r WHERE r.i_id=$1 ORDER BY creation_date DESC
+2022-02-20 20:48:29.796 UTC,project1user,SELECT,execute S_7: SELECT * FROM trust t WHERE t.source_u_id=$1
+2022-02-20 20:48:29.796 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:29.894 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:29.894 UTC,project1user,UPDATE,execute S_8: UPDATE review SET rating = $1 WHERE i_id=$2 AND u_id=$3
+2022-02-20 20:48:29.895 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:29.994 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:29.994 UTC,project1user,SELECT,"execute S_11: SELECT avg(rating) FROM review r, trust t WHERE r.u_id=t.target_u_id AND r.i_id=$1 AND t.source_u_id=$2"
+2022-02-20 20:48:29.996 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:30.093 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:30.093 UTC,project1user,SELECT,"execute S_11: SELECT avg(rating) FROM review r, trust t WHERE r.u_id=t.target_u_id AND r.i_id=$1 AND t.source_u_id=$2"
+2022-02-20 20:48:30.095 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:30.193 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:30.193 UTC,project1user,UPDATE,execute S_8: UPDATE review SET rating = $1 WHERE i_id=$2 AND u_id=$3
+2022-02-20 20:48:30.194 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:30.293 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:30.294 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:30.295 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:30.394 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:30.394 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:30.395 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:30.494 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:30.494 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:30.496 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:30.594 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:30.594 UTC,project1user,UPDATE,execute S_8: UPDATE review SET rating = $1 WHERE i_id=$2 AND u_id=$3
+2022-02-20 20:48:30.595 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:30.693 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:30.693 UTC,project1user,UPDATE,execute S_4: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:48:30.694 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:30.793 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:30.793 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:30.795 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:30.894 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:30.894 UTC,project1user,SELECT,execute S_6: SELECT * FROM review r WHERE r.i_id=$1 ORDER BY creation_date DESC
+2022-02-20 20:48:30.896 UTC,project1user,SELECT,execute S_7: SELECT * FROM trust t WHERE t.source_u_id=$1
+2022-02-20 20:48:30.896 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:30.994 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:30.994 UTC,project1user,SELECT,"execute S_11: SELECT avg(rating) FROM review r, trust t WHERE r.u_id=t.target_u_id AND r.i_id=$1 AND t.source_u_id=$2"
+2022-02-20 20:48:30.996 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:31.093 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:31.093 UTC,project1user,UPDATE,execute S_8: UPDATE review SET rating = $1 WHERE i_id=$2 AND u_id=$3
+2022-02-20 20:48:31.094 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:31.193 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:31.193 UTC,project1user,UPDATE,execute S_8: UPDATE review SET rating = $1 WHERE i_id=$2 AND u_id=$3
+2022-02-20 20:48:31.195 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:31.293 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:31.293 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:31.295 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:31.393 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:31.394 UTC,project1user,SELECT,execute S_6: SELECT * FROM review r WHERE r.i_id=$1 ORDER BY creation_date DESC
+2022-02-20 20:48:31.395 UTC,project1user,SELECT,execute S_7: SELECT * FROM trust t WHERE t.source_u_id=$1
+2022-02-20 20:48:31.395 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:31.494 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:31.494 UTC,project1user,UPDATE,execute S_9: UPDATE item SET title = $1 WHERE i_id=$2
+2022-02-20 20:48:31.494 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:31.594 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:31.594 UTC,project1user,SELECT,"execute S_11: SELECT avg(rating) FROM review r, trust t WHERE r.u_id=t.target_u_id AND r.i_id=$1 AND t.source_u_id=$2"
+2022-02-20 20:48:31.596 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:31.693 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:31.693 UTC,project1user,UPDATE,execute S_4: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:48:31.694 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:31.793 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:31.793 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:31.794 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:31.893 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:31.894 UTC,project1user,UPDATE,execute S_8: UPDATE review SET rating = $1 WHERE i_id=$2 AND u_id=$3
+2022-02-20 20:48:31.895 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:31.994 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:31.994 UTC,project1user,UPDATE,execute S_8: UPDATE review SET rating = $1 WHERE i_id=$2 AND u_id=$3
+2022-02-20 20:48:31.995 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:32.094 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:32.094 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:32.094 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:32.193 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:32.193 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:32.194 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:32.293 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:32.293 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:32.294 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:32.393 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:32.393 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:32.395 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:32.494 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:32.494 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:32.495 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:32.594 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:32.594 UTC,project1user,UPDATE,execute S_8: UPDATE review SET rating = $1 WHERE i_id=$2 AND u_id=$3
+2022-02-20 20:48:32.595 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:32.693 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:32.693 UTC,project1user,UPDATE,execute S_9: UPDATE item SET title = $1 WHERE i_id=$2
+2022-02-20 20:48:32.693 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:32.793 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:32.793 UTC,project1user,SELECT,"execute S_11: SELECT avg(rating) FROM review r, trust t WHERE r.u_id=t.target_u_id AND r.i_id=$1 AND t.source_u_id=$2"
+2022-02-20 20:48:32.795 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:32.893 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:32.893 UTC,project1user,SELECT,execute S_5: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:48:32.895 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:32.993 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:32.993 UTC,project1user,SELECT,"execute S_12: SELECT * FROM review r, useracct u WHERE u.u_id = r.u_id AND r.u_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:32.995 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:33.094 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:33.094 UTC,project1user,SELECT,execute S_5: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:48:33.095 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:33.194 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:33.194 UTC,project1user,UPDATE,execute S_8: UPDATE review SET rating = $1 WHERE i_id=$2 AND u_id=$3
+2022-02-20 20:48:33.195 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:33.293 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:33.293 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:33.294 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:33.393 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:33.393 UTC,project1user,SELECT,"execute S_11: SELECT avg(rating) FROM review r, trust t WHERE r.u_id=t.target_u_id AND r.i_id=$1 AND t.source_u_id=$2"
+2022-02-20 20:48:33.395 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:33.493 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:33.493 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:33.494 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:33.594 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:33.594 UTC,project1user,SELECT,execute S_6: SELECT * FROM review r WHERE r.i_id=$1 ORDER BY creation_date DESC
+2022-02-20 20:48:33.595 UTC,project1user,SELECT,execute S_7: SELECT * FROM trust t WHERE t.source_u_id=$1
+2022-02-20 20:48:33.595 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:33.694 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:33.694 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:33.695 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:33.793 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:33.793 UTC,project1user,SELECT,execute S_6: SELECT * FROM review r WHERE r.i_id=$1 ORDER BY creation_date DESC
+2022-02-20 20:48:33.795 UTC,project1user,SELECT,execute S_7: SELECT * FROM trust t WHERE t.source_u_id=$1
+2022-02-20 20:48:33.795 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:33.899 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:33.899 UTC,project1user,UPDATE,execute S_8: UPDATE review SET rating = $1 WHERE i_id=$2 AND u_id=$3
+2022-02-20 20:48:33.900 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:33.993 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:33.993 UTC,project1user,UPDATE,execute S_9: UPDATE item SET title = $1 WHERE i_id=$2
+2022-02-20 20:48:33.994 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:34.094 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:34.094 UTC,project1user,UPDATE,execute S_4: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:48:34.094 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:34.193 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:34.194 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:34.195 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:34.294 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:34.294 UTC,project1user,SELECT,execute S_6: SELECT * FROM review r WHERE r.i_id=$1 ORDER BY creation_date DESC
+2022-02-20 20:48:34.296 UTC,project1user,SELECT,execute S_7: SELECT * FROM trust t WHERE t.source_u_id=$1
+2022-02-20 20:48:34.297 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:34.393 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:34.393 UTC,project1user,UPDATE,execute S_4: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:48:34.394 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:34.493 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:34.493 UTC,project1user,SELECT,"execute S_12: SELECT * FROM review r, useracct u WHERE u.u_id = r.u_id AND r.u_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:34.495 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:34.593 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:34.594 UTC,project1user,UPDATE,execute S_8: UPDATE review SET rating = $1 WHERE i_id=$2 AND u_id=$3
+2022-02-20 20:48:34.595 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:34.694 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:34.694 UTC,project1user,SELECT,execute S_5: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:48:34.695 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:34.794 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:34.794 UTC,project1user,SELECT,execute S_6: SELECT * FROM review r WHERE r.i_id=$1 ORDER BY creation_date DESC
+2022-02-20 20:48:34.795 UTC,project1user,SELECT,execute S_7: SELECT * FROM trust t WHERE t.source_u_id=$1
+2022-02-20 20:48:34.795 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:34.893 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:34.893 UTC,project1user,SELECT,"execute S_11: SELECT avg(rating) FROM review r, trust t WHERE r.u_id=t.target_u_id AND r.i_id=$1 AND t.source_u_id=$2"
+2022-02-20 20:48:34.894 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:34.993 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:34.993 UTC,project1user,UPDATE,execute S_8: UPDATE review SET rating = $1 WHERE i_id=$2 AND u_id=$3
+2022-02-20 20:48:34.995 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:35.094 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:35.094 UTC,project1user,UPDATE,execute S_4: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:48:35.094 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:35.194 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:35.194 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:35.195 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:35.294 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:35.294 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:35.296 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:35.393 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:35.393 UTC,project1user,SELECT,"execute S_12: SELECT * FROM review r, useracct u WHERE u.u_id = r.u_id AND r.u_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:35.395 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:35.493 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:35.493 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:35.494 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:35.594 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:35.594 UTC,project1user,UPDATE,execute S_4: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:48:35.594 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:35.694 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:35.694 UTC,project1user,UPDATE,execute S_8: UPDATE review SET rating = $1 WHERE i_id=$2 AND u_id=$3
+2022-02-20 20:48:35.695 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:35.794 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:35.794 UTC,project1user,SELECT,execute S_6: SELECT * FROM review r WHERE r.i_id=$1 ORDER BY creation_date DESC
+2022-02-20 20:48:35.796 UTC,project1user,SELECT,execute S_7: SELECT * FROM trust t WHERE t.source_u_id=$1
+2022-02-20 20:48:35.797 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:35.893 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:35.893 UTC,project1user,UPDATE,execute S_9: UPDATE item SET title = $1 WHERE i_id=$2
+2022-02-20 20:48:35.894 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:35.993 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:35.994 UTC,project1user,SELECT,"execute S_12: SELECT * FROM review r, useracct u WHERE u.u_id = r.u_id AND r.u_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:35.995 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:36.094 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:36.094 UTC,project1user,UPDATE,execute S_8: UPDATE review SET rating = $1 WHERE i_id=$2 AND u_id=$3
+2022-02-20 20:48:36.095 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:36.194 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:36.194 UTC,project1user,UPDATE,execute S_4: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:48:36.195 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:36.294 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:36.294 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:36.295 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:36.393 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:36.393 UTC,project1user,UPDATE,execute S_9: UPDATE item SET title = $1 WHERE i_id=$2
+2022-02-20 20:48:36.394 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:36.493 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:36.493 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:36.495 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:36.593 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:36.594 UTC,project1user,SELECT,"execute S_11: SELECT avg(rating) FROM review r, trust t WHERE r.u_id=t.target_u_id AND r.i_id=$1 AND t.source_u_id=$2"
+2022-02-20 20:48:36.596 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:36.694 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:36.694 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:36.696 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:36.793 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:36.793 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:36.795 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:36.893 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:36.893 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:36.894 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:36.993 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:36.993 UTC,project1user,UPDATE,execute S_4: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:48:36.994 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:37.094 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:37.094 UTC,project1user,SELECT,"execute S_12: SELECT * FROM review r, useracct u WHERE u.u_id = r.u_id AND r.u_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:37.095 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:37.194 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:37.194 UTC,project1user,SELECT,execute S_5: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:48:37.195 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:37.293 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:37.293 UTC,project1user,UPDATE,execute S_8: UPDATE review SET rating = $1 WHERE i_id=$2 AND u_id=$3
+2022-02-20 20:48:37.294 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:37.393 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:37.393 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:37.394 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:37.493 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:37.493 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:37.494 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:37.593 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:37.593 UTC,project1user,SELECT,execute S_6: SELECT * FROM review r WHERE r.i_id=$1 ORDER BY creation_date DESC
+2022-02-20 20:48:37.595 UTC,project1user,SELECT,execute S_7: SELECT * FROM trust t WHERE t.source_u_id=$1
+2022-02-20 20:48:37.596 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:37.694 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:37.694 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:37.695 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:37.794 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:37.794 UTC,project1user,SELECT,"execute S_12: SELECT * FROM review r, useracct u WHERE u.u_id = r.u_id AND r.u_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:37.795 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:37.893 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:37.893 UTC,project1user,UPDATE,execute S_9: UPDATE item SET title = $1 WHERE i_id=$2
+2022-02-20 20:48:37.894 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:37.993 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:37.993 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:37.995 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:38.093 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:38.094 UTC,project1user,SELECT,execute S_5: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:48:38.095 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:38.194 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:38.194 UTC,project1user,SELECT,execute S_6: SELECT * FROM review r WHERE r.i_id=$1 ORDER BY creation_date DESC
+2022-02-20 20:48:38.195 UTC,project1user,SELECT,execute S_7: SELECT * FROM trust t WHERE t.source_u_id=$1
+2022-02-20 20:48:38.196 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:38.294 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:38.294 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:38.295 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:38.394 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:38.394 UTC,project1user,SELECT,execute S_5: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:48:38.396 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:38.493 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:38.493 UTC,project1user,UPDATE,execute S_8: UPDATE review SET rating = $1 WHERE i_id=$2 AND u_id=$3
+2022-02-20 20:48:38.495 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:38.593 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:38.593 UTC,project1user,UPDATE,execute S_9: UPDATE item SET title = $1 WHERE i_id=$2
+2022-02-20 20:48:38.594 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:38.693 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:38.693 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:38.695 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:38.794 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:38.794 UTC,project1user,UPDATE,execute S_9: UPDATE item SET title = $1 WHERE i_id=$2
+2022-02-20 20:48:38.794 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:38.894 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:38.894 UTC,project1user,SELECT,"execute S_12: SELECT * FROM review r, useracct u WHERE u.u_id = r.u_id AND r.u_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:38.895 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:38.994 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:38.994 UTC,project1user,SELECT,execute S_5: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:48:38.995 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:39.093 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:39.093 UTC,project1user,SELECT,"execute S_11: SELECT avg(rating) FROM review r, trust t WHERE r.u_id=t.target_u_id AND r.i_id=$1 AND t.source_u_id=$2"
+2022-02-20 20:48:39.095 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:39.193 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:39.193 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:39.195 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:39.293 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:39.294 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:39.295 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:39.393 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:39.394 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:39.394 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:39.494 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:39.494 UTC,project1user,SELECT,execute S_6: SELECT * FROM review r WHERE r.i_id=$1 ORDER BY creation_date DESC
+2022-02-20 20:48:39.496 UTC,project1user,SELECT,execute S_7: SELECT * FROM trust t WHERE t.source_u_id=$1
+2022-02-20 20:48:39.496 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:39.594 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:39.594 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:39.595 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:39.693 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:39.693 UTC,project1user,SELECT,"execute S_12: SELECT * FROM review r, useracct u WHERE u.u_id = r.u_id AND r.u_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:39.695 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:39.793 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:39.793 UTC,project1user,UPDATE,execute S_9: UPDATE item SET title = $1 WHERE i_id=$2
+2022-02-20 20:48:39.794 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:39.894 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:39.894 UTC,project1user,SELECT,"execute S_12: SELECT * FROM review r, useracct u WHERE u.u_id = r.u_id AND r.u_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:39.895 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:39.994 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:39.994 UTC,project1user,SELECT,"execute S_11: SELECT avg(rating) FROM review r, trust t WHERE r.u_id=t.target_u_id AND r.i_id=$1 AND t.source_u_id=$2"
+2022-02-20 20:48:39.996 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:40.093 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:40.093 UTC,project1user,SELECT,execute S_6: SELECT * FROM review r WHERE r.i_id=$1 ORDER BY creation_date DESC
+2022-02-20 20:48:40.094 UTC,project1user,SELECT,execute S_7: SELECT * FROM trust t WHERE t.source_u_id=$1
+2022-02-20 20:48:40.095 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:40.193 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:40.193 UTC,project1user,UPDATE,execute S_8: UPDATE review SET rating = $1 WHERE i_id=$2 AND u_id=$3
+2022-02-20 20:48:40.195 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:40.293 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:40.294 UTC,project1user,SELECT,execute S_5: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:48:40.295 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:40.394 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:40.394 UTC,project1user,UPDATE,execute S_9: UPDATE item SET title = $1 WHERE i_id=$2
+2022-02-20 20:48:40.394 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:40.493 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:40.493 UTC,project1user,SELECT,"execute S_12: SELECT * FROM review r, useracct u WHERE u.u_id = r.u_id AND r.u_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:40.494 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:40.593 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:40.593 UTC,project1user,UPDATE,execute S_8: UPDATE review SET rating = $1 WHERE i_id=$2 AND u_id=$3
+2022-02-20 20:48:40.594 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:40.693 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:40.693 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:40.694 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:40.793 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:40.793 UTC,project1user,UPDATE,execute S_4: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:48:40.794 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:40.893 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:40.893 UTC,project1user,UPDATE,execute S_4: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:48:40.894 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:40.994 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:40.994 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:40.995 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:41.094 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:41.094 UTC,project1user,SELECT,execute S_5: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:48:41.096 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:41.193 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:41.193 UTC,project1user,SELECT,"execute S_12: SELECT * FROM review r, useracct u WHERE u.u_id = r.u_id AND r.u_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:41.195 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:41.293 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:41.293 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:41.295 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:41.394 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:41.394 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:41.395 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:41.494 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:41.494 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:41.494 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:41.594 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:41.594 UTC,project1user,SELECT,"execute S_11: SELECT avg(rating) FROM review r, trust t WHERE r.u_id=t.target_u_id AND r.i_id=$1 AND t.source_u_id=$2"
+2022-02-20 20:48:41.596 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:41.693 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:41.693 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:41.694 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:41.793 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:41.794 UTC,project1user,SELECT,execute S_5: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:48:41.795 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:41.894 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:41.894 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:41.894 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:41.994 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:41.994 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:41.994 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:42.094 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:42.094 UTC,project1user,UPDATE,execute S_9: UPDATE item SET title = $1 WHERE i_id=$2
+2022-02-20 20:48:42.095 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:42.193 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:42.193 UTC,project1user,SELECT,execute S_5: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:48:42.194 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:42.293 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:42.293 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:42.294 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:42.393 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:42.393 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:42.394 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:42.493 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:42.494 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:42.494 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:42.594 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:42.594 UTC,project1user,UPDATE,execute S_8: UPDATE review SET rating = $1 WHERE i_id=$2 AND u_id=$3
+2022-02-20 20:48:42.595 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:42.694 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:42.694 UTC,project1user,UPDATE,execute S_9: UPDATE item SET title = $1 WHERE i_id=$2
+2022-02-20 20:48:42.695 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:42.793 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:42.793 UTC,project1user,SELECT,"execute S_11: SELECT avg(rating) FROM review r, trust t WHERE r.u_id=t.target_u_id AND r.i_id=$1 AND t.source_u_id=$2"
+2022-02-20 20:48:42.795 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:42.893 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:42.893 UTC,project1user,SELECT,execute S_5: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:48:42.894 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:42.993 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:42.994 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:42.994 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:43.094 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:43.094 UTC,project1user,SELECT,"execute S_12: SELECT * FROM review r, useracct u WHERE u.u_id = r.u_id AND r.u_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:43.095 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:43.194 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:43.194 UTC,project1user,SELECT,execute S_5: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:48:43.196 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:43.293 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:43.293 UTC,project1user,UPDATE,execute S_9: UPDATE item SET title = $1 WHERE i_id=$2
+2022-02-20 20:48:43.294 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:43.393 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:43.393 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:43.395 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:43.493 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:43.493 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:43.494 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:43.594 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:43.594 UTC,project1user,UPDATE,execute S_9: UPDATE item SET title = $1 WHERE i_id=$2
+2022-02-20 20:48:43.594 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:43.694 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:43.694 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:43.695 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:43.794 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:43.794 UTC,project1user,UPDATE,execute S_4: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:48:43.794 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:43.893 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:43.893 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:43.894 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:43.993 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:43.993 UTC,project1user,SELECT,"execute S_12: SELECT * FROM review r, useracct u WHERE u.u_id = r.u_id AND r.u_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:43.994 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:44.093 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:44.093 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:44.094 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:44.194 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:44.194 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:44.196 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:44.294 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:44.294 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:44.295 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:44.394 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:44.394 UTC,project1user,SELECT,execute S_6: SELECT * FROM review r WHERE r.i_id=$1 ORDER BY creation_date DESC
+2022-02-20 20:48:44.395 UTC,project1user,SELECT,execute S_7: SELECT * FROM trust t WHERE t.source_u_id=$1
+2022-02-20 20:48:44.395 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:44.493 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:44.493 UTC,project1user,SELECT,"execute S_11: SELECT avg(rating) FROM review r, trust t WHERE r.u_id=t.target_u_id AND r.i_id=$1 AND t.source_u_id=$2"
+2022-02-20 20:48:44.495 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:44.593 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:44.593 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:44.595 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:44.693 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:44.693 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:44.694 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:44.794 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:44.794 UTC,project1user,SELECT,"execute S_11: SELECT avg(rating) FROM review r, trust t WHERE r.u_id=t.target_u_id AND r.i_id=$1 AND t.source_u_id=$2"
+2022-02-20 20:48:44.796 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:44.894 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:44.894 UTC,project1user,SELECT,"execute S_11: SELECT avg(rating) FROM review r, trust t WHERE r.u_id=t.target_u_id AND r.i_id=$1 AND t.source_u_id=$2"
+2022-02-20 20:48:44.896 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:44.993 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:44.993 UTC,project1user,UPDATE,execute S_9: UPDATE item SET title = $1 WHERE i_id=$2
+2022-02-20 20:48:44.994 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:45.093 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:45.093 UTC,project1user,UPDATE,execute S_4: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:48:45.094 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:45.193 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:45.194 UTC,project1user,SELECT,execute S_6: SELECT * FROM review r WHERE r.i_id=$1 ORDER BY creation_date DESC
+2022-02-20 20:48:45.195 UTC,project1user,SELECT,execute S_7: SELECT * FROM trust t WHERE t.source_u_id=$1
+2022-02-20 20:48:45.196 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:45.294 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:45.294 UTC,project1user,SELECT,"execute S_12: SELECT * FROM review r, useracct u WHERE u.u_id = r.u_id AND r.u_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:45.295 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:45.394 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:45.394 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:45.395 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:45.493 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:45.493 UTC,project1user,UPDATE,execute S_8: UPDATE review SET rating = $1 WHERE i_id=$2 AND u_id=$3
+2022-02-20 20:48:45.494 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:45.593 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:45.593 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:45.594 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:45.693 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:45.694 UTC,project1user,UPDATE,execute S_9: UPDATE item SET title = $1 WHERE i_id=$2
+2022-02-20 20:48:45.694 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:45.793 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:45.794 UTC,project1user,SELECT,execute S_6: SELECT * FROM review r WHERE r.i_id=$1 ORDER BY creation_date DESC
+2022-02-20 20:48:45.795 UTC,project1user,SELECT,execute S_7: SELECT * FROM trust t WHERE t.source_u_id=$1
+2022-02-20 20:48:45.796 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:45.894 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:45.894 UTC,project1user,UPDATE,execute S_8: UPDATE review SET rating = $1 WHERE i_id=$2 AND u_id=$3
+2022-02-20 20:48:45.895 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:45.993 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:45.993 UTC,project1user,UPDATE,execute S_4: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:48:45.993 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:46.093 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:46.093 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:46.095 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:46.194 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:46.194 UTC,project1user,UPDATE,execute S_9: UPDATE item SET title = $1 WHERE i_id=$2
+2022-02-20 20:48:46.194 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:46.294 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:46.294 UTC,project1user,UPDATE,execute S_8: UPDATE review SET rating = $1 WHERE i_id=$2 AND u_id=$3
+2022-02-20 20:48:46.295 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:46.394 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:46.394 UTC,project1user,SELECT,"execute S_12: SELECT * FROM review r, useracct u WHERE u.u_id = r.u_id AND r.u_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:46.395 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:46.493 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:46.493 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:46.494 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:46.593 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:46.593 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:46.594 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:46.693 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:46.693 UTC,project1user,UPDATE,execute S_8: UPDATE review SET rating = $1 WHERE i_id=$2 AND u_id=$3
+2022-02-20 20:48:46.694 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:46.793 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:46.794 UTC,project1user,SELECT,execute S_5: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:48:46.795 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:46.894 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:46.894 UTC,project1user,UPDATE,execute S_8: UPDATE review SET rating = $1 WHERE i_id=$2 AND u_id=$3
+2022-02-20 20:48:46.895 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:46.993 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:46.993 UTC,project1user,SELECT,"execute S_12: SELECT * FROM review r, useracct u WHERE u.u_id = r.u_id AND r.u_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:46.994 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:47.093 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:47.093 UTC,project1user,SELECT,"execute S_12: SELECT * FROM review r, useracct u WHERE u.u_id = r.u_id AND r.u_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:47.095 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:47.193 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:47.193 UTC,project1user,UPDATE,execute S_4: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:48:47.194 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:47.294 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:47.294 UTC,project1user,SELECT,"execute S_12: SELECT * FROM review r, useracct u WHERE u.u_id = r.u_id AND r.u_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:47.295 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:47.394 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:47.394 UTC,project1user,SELECT,execute S_5: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:48:47.395 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:47.494 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:47.494 UTC,project1user,SELECT,execute S_6: SELECT * FROM review r WHERE r.i_id=$1 ORDER BY creation_date DESC
+2022-02-20 20:48:47.495 UTC,project1user,SELECT,execute S_7: SELECT * FROM trust t WHERE t.source_u_id=$1
+2022-02-20 20:48:47.495 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:47.593 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:47.593 UTC,project1user,SELECT,execute S_6: SELECT * FROM review r WHERE r.i_id=$1 ORDER BY creation_date DESC
+2022-02-20 20:48:47.594 UTC,project1user,SELECT,execute S_7: SELECT * FROM trust t WHERE t.source_u_id=$1
+2022-02-20 20:48:47.595 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:47.693 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:47.693 UTC,project1user,UPDATE,execute S_8: UPDATE review SET rating = $1 WHERE i_id=$2 AND u_id=$3
+2022-02-20 20:48:47.695 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:47.793 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:47.793 UTC,project1user,UPDATE,execute S_9: UPDATE item SET title = $1 WHERE i_id=$2
+2022-02-20 20:48:47.794 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:47.894 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:47.894 UTC,project1user,UPDATE,execute S_4: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:48:47.895 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:47.994 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:47.994 UTC,project1user,UPDATE,execute S_9: UPDATE item SET title = $1 WHERE i_id=$2
+2022-02-20 20:48:47.995 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:48.093 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:48.093 UTC,project1user,UPDATE,execute S_9: UPDATE item SET title = $1 WHERE i_id=$2
+2022-02-20 20:48:48.094 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:48.193 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:48.193 UTC,project1user,SELECT,execute S_6: SELECT * FROM review r WHERE r.i_id=$1 ORDER BY creation_date DESC
+2022-02-20 20:48:48.195 UTC,project1user,SELECT,execute S_7: SELECT * FROM trust t WHERE t.source_u_id=$1
+2022-02-20 20:48:48.196 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:48.294 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:48.294 UTC,project1user,UPDATE,execute S_8: UPDATE review SET rating = $1 WHERE i_id=$2 AND u_id=$3
+2022-02-20 20:48:48.295 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:48.394 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:48.394 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:48.394 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:48.494 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:48.494 UTC,project1user,SELECT,"execute S_12: SELECT * FROM review r, useracct u WHERE u.u_id = r.u_id AND r.u_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:48.495 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:48.593 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:48.593 UTC,project1user,UPDATE,execute S_3: UPDATE trust SET trust = $1 WHERE source_u_id=$2 AND target_u_id=$3
+2022-02-20 20:48:48.594 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:48.693 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:48.693 UTC,project1user,UPDATE,execute S_4: UPDATE useracct SET name = $1 WHERE u_id=$2
+2022-02-20 20:48:48.694 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:48.793 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:48.793 UTC,project1user,SELECT,"execute S_10: SELECT * FROM review r, item i WHERE i.i_id = r.i_id and r.i_id=$1 ORDER BY rating DESC, r.creation_date DESC LIMIT 10"
+2022-02-20 20:48:48.795 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:48.894 UTC,project1user,BEGIN,execute S_2: BEGIN
+2022-02-20 20:48:48.894 UTC,project1user,SELECT,execute S_5: SELECT avg(rating) FROM review r WHERE r.i_id=$1
+2022-02-20 20:48:48.895 UTC,project1user,COMMIT,execute S_1: COMMIT
+2022-02-20 20:48:49.037 UTC,project1user,BEGIN,execute <unnamed>: BEGIN
+2022-02-20 20:48:49.038 UTC,project1user,SET,execute <unnamed>: SET extra_float_digits = 3
+2022-02-20 20:48:49.038 UTC,project1user,SET,execute <unnamed>: SET application_name = 'PostgreSQL JDBC Driver'
+2022-02-20 20:48:49.038 UTC,project1user,COMMIT,execute <unnamed>: COMMIT
+2022-02-20 20:48:49.039 UTC,project1user,SELECT,execute <unnamed>: SELECT version()
+2022-02-20 20:48:49.040 UTC,project1user,SHOW,execute <unnamed>: SHOW ALL
+2022-02-20 20:48:49.044 UTC,project1user,SELECT,execute <unnamed>: SELECT * FROM pg_stat_archiver
+2022-02-20 20:48:49.056 UTC,project1user,SELECT,execute <unnamed>: SELECT * FROM pg_stat_bgwriter
+2022-02-20 20:48:49.068 UTC,project1user,SELECT,execute <unnamed>: SELECT * FROM pg_stat_database
+2022-02-20 20:48:49.069 UTC,project1user,SELECT,execute <unnamed>: SELECT * FROM pg_stat_database_conflicts
+2022-02-20 20:48:49.080 UTC,project1user,SELECT,execute <unnamed>: SELECT * FROM pg_stat_user_tables
+2022-02-20 20:48:49.083 UTC,project1user,SELECT,execute <unnamed>: SELECT * FROM pg_statio_user_tables
+2022-02-20 20:48:49.086 UTC,project1user,SELECT,execute <unnamed>: SELECT * FROM pg_stat_user_indexes
+2022-02-20 20:48:49.087 UTC,project1user,SELECT,execute <unnamed>: SELECT * FROM pg_statio_user_indexes
+2022-02-20 20:49:05.791 UTC,project1user,idle,statement: ALTER SYSTEM SET log_destination='stderr'
+2022-02-20 20:49:05.866 UTC,project1user,idle,statement: ALTER SYSTEM SET logging_collector='off'
+2022-02-20 20:49:05.942 UTC,project1user,idle,statement: ALTER SYSTEM SET log_statement='none'
+2022-02-20 20:49:06.022 UTC,,,received fast shutdown request
+2022-02-20 20:49:06.027 UTC,,,aborting any active transactions
+2022-02-20 20:49:06.030 UTC,,,"background worker ""logical replication launcher"" (PID 10665) exited with exit code 1"
+2022-02-20 20:49:06.032 UTC,,,shutting down
+2022-02-20 20:49:06.111 UTC,,,database system is shut down
