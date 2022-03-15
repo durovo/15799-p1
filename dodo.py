@@ -9,4 +9,26 @@ def task_project1():
         ],
         # Always rerun this task.
         "uptodate": [False],
+        "params": [
+            {
+                'name': 'timeout',
+                'default': '1m',
+                'short': 't',
+                'long': 'timeout'
+            },{
+                'name': 'workload_csv',
+                'default': './test.csv',
+                'short': 'w',
+                'long': 'workload_csv'
+            }
+        ]
+    }
+
+
+def task_project1_setup():
+    return {
+        "actions": [
+            'pip install -r requirements.txt',
+            ''
+        ]
     }
