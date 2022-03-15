@@ -1,25 +1,22 @@
+from index_recommender import find_best_index
 def task_project1():
-    return {
+    def generate_actions(workload_csv, timeout):
+        find_best_index(workload_csv)
+    return {        
         # A list of actions. This can be bash or Python callables.
-        "actions": [
-            'echo "Faking action generation."',
-            'echo "SELECT 1;" > actions.sql',
-            'echo "SELECT 2;" >> actions.sql',
-            'echo \'{"VACUUM": true}\' > config.json',
-        ],
+        "actions": [generate_actions],
         # Always rerun this task.
         "uptodate": [False],
         "params": [
             {
-                'name': 'timeout',
-                'default': '1m',
-                'short': 't',
-                'long': 'timeout'
-            },{
                 'name': 'workload_csv',
                 'default': './test.csv',
-                'short': 'w',
                 'long': 'workload_csv'
+            },
+            {
+                'name': 'timeout',
+                'default': '1m',
+                'long': 'timeout'
             }
         ]
     }
@@ -28,7 +25,8 @@ def task_project1():
 def task_project1_setup():
     return {
         "actions": [
+            'sudo apt update',
             'pip install -r requirements.txt',
-            ''
+            'sudo apt install postgresql-14-hypopg'
         ]
     }
