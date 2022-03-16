@@ -6,9 +6,43 @@ from itertools import combinations
 import psycopg2 as pg
 from pglast import parser
 from random import shuffle, randint, choice
+import os.path
+import pickle
+
+verbose = True
+
+
+def vprint(*kwargs):
+    if verbose:
+        print(*kwargs)
+
 
 CONNECTION_STRING = "dbname='project1db' user='project1user' password='project1pass' host='localhost'"
 MAX_WIDTH = 3
+
+"""
+    Drops all the non-constrained indexes
+    'borrowed' from https://stackoverflow.com/a/48862822
+"""
+
+
+def drop_all_indexes(conn):
+    vprint("--- Dropping all existing indexes ---")
+    get_drop_index_queries_query = """select format('drop index %I.%I;', s.nspname, i.relname) as drop_statement
+                from pg_index idx
+                join pg_class i on i.oid = idx.indexrelid
+                join pg_class t on t.oid = idx.indrelid
+                join pg_namespace s on i.relnamespace = s.oid
+                where s.nspname in ('public')
+                and not idx.indisprimary;"""
+    with conn.cursor() as cur:
+        cur.execute(get_drop_index_queries_query)
+        drop_queries = cur.fetchall()
+        for query in drop_queries:
+            cur.execute(query[0])
+        cur.execute(get_drop_index_queries_query)
+        drop_queries = cur.fetchall()
+    vprint("--- Indexes dropped ---")
 
 
 def get_table_column_map(conn):
@@ -111,7 +145,7 @@ def get_columns_from_logs(logs_path, max_width=2):
 
 
 def generate_index_creation_queries(columns):
-    query_template = 'CREATE INDEX ON {} ({})'
+    query_template = 'CREATE INDEX IF NOT EXISTS ON {} ({})'
     queries = []
 
     for column_group in columns:
@@ -163,16 +197,39 @@ def get_query_costs(query_clusters, conn):
 
 
 def find_best_index(log_file_path, max_iterations=3000):
-    table_column_combos, group_counts, group_repr = get_columns_from_logs(
-        log_file_path)
-    best_config = []
+
     with open('config.json', 'w') as f:
         f.write('{"VACUUM": false}')
+
     with pg.connect(CONNECTION_STRING) as conn:
-        baseline_costs = get_query_costs(group_repr, conn)
-        baseline_cost = get_scaled_loss(group_counts, baseline_costs)
-        min_cost = baseline_cost
+
+        state_file = log_file_path + '.statefile'
+
+        if (os.path.isfile(state_file)):
+            with open(state_file, 'rb') as f:
+                saved_objects = pickle.load(f)
+                best_config = saved_objects['best_config']
+                min_cost = saved_objects['best_cost']
+                baseline_cost = saved_objects['baseline_cost']
+                table_column_combos = saved_objects['table_column_combos']
+                group_counts = saved_objects['group_counts']
+                group_repr = saved_objects['group_repr']
+        else:
+            table_column_combos, group_counts, group_repr = get_columns_from_logs(
+                log_file_path)
+            # calculate the costs with no indexes
+            baseline_costs = get_query_costs(group_repr, conn)
+            baseline_cost = get_scaled_loss(group_counts, baseline_costs)
+            min_cost = baseline_cost
+
+            best_config = []
+
+        # drop all existing indexes
+        drop_all_indexes(conn)
+
+        # ensure that hypopg is enabled
         enable_hypopg(conn)
+
         potential_indexes = get_potential_indexes(table_column_combos)
         for i in range(max_iterations):
             cmb = get_random_indexes(potential_indexes)
@@ -187,12 +244,32 @@ def find_best_index(log_file_path, max_iterations=3000):
 
             if i % 1000 == 0:
                 #                 print(best_config, min_cost, baseline_cost)
+                index_creation_queries = generate_index_creation_queries(
+                    best_config)
                 with open('actions.sql', 'w') as f:
-                    for query in index_q:
+                    for query in index_creation_queries:
                         f.write("{};\n".format(query))
+                with open(state_file, 'wb') as f:
+                    saved_objects = pickle.dump({
+                        'best_config': best_config,
+                        'best_cost': min_cost,
+                        'baseline_cost': baseline_cost,
+                        'table_column_combos': table_column_combos,
+                        'group_counts': group_counts,
+                        'group_repr': group_repr
+                    })
 
-    index_creation_queries = generate_index_creation_queries(best_config)
-    with open('actions.sql', 'w') as f:
-        for query in index_creation_queries:
+        index_creation_queries = generate_index_creation_queries(best_config)
+        with open('actions.sql', 'w') as f:
+            for query in index_creation_queries:
 
-            f.write("{};\n".format(query))
+                f.write("{};\n".format(query))
+        with open(state_file, 'wb') as f:
+            saved_objects = pickle.dump({
+                'best_config': best_config,
+                'best_cost': min_cost,
+                'baseline_cost': baseline_cost,
+                'table_column_combos': table_column_combos,
+                'group_counts': group_counts,
+                'group_repr': group_repr
+            })
