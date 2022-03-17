@@ -26,8 +26,8 @@ def task_project1_setup():
     return {
         "actions": [
             'sudo apt update',
-            'sudo apt install python3-pip'
+            'sudo apt -y install python3-pip',
             'pip3 install -r requirements.txt',
-            'sudo apt install postgresql-14-hypopg'
+            'sudo apt -y install postgresql-14-hypopg'
         ]
     }
