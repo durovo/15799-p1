@@ -27,7 +27,8 @@ MAX_WIDTH = 4
 """
 def drop_all_indexes(conn):
     vprint("--- Dropping all existing indexes ---")
-    get_drop_index_queries_query = """SELECT format('drop index %I.%I;', s.nspname, i.relname) as drop_statement
+    get_drop_index_queries_query = """
+        SELECT format('drop index %I.%I;', s.nspname, i.relname) as drop_statement
                 FROM pg_index idx
                 JOIN pg_class i on i.oid = idx.indexrelid
                 JOIN pg_class t on t.oid = idx.indrelid
@@ -44,6 +45,9 @@ def drop_all_indexes(conn):
     vprint("--- Indexes dropped ---")
 
 
+"""
+    Fetches the set of all user defined tables and their columns from the current database.
+"""
 def get_table_column_map(conn):
     QUERY = "select table_name, column_name from information_schema.columns where table_schema='public';"
 
@@ -64,7 +68,10 @@ def filter_interesting_queries(queries):
     res = [q for q in res if 'WHERE' in q or 'ORDER' in q or 'JOIN' in q or 'join' in q or 'where' in q or 'order' in q]
     return res
 
-
+"""
+Clusters the given queries by mapping each query to its query template 
+which does not have the specific params.
+"""
 def cluster_queries(queries):
     cluster_frequencies = defaultdict(int)
     clusters = {}
@@ -79,7 +86,8 @@ def cluster_queries(queries):
             pass
     return gqueries, cluster_frequencies, clusters
 
-
+"""Extracts groups of columns for each cluster representative query 
+    based on whether they appear together in a clause"""
 def get_relevant_columns(clusters, cluster_counts, table_column_map, max_width):
     table_column_combos = defaultdict(set)
     for qgroup, query in clusters.items():
@@ -130,23 +138,24 @@ def get_random_indexes(potential_indexes):
     return indexes_set
 
 
+"""
+Processes the given workload logs and extracts columns relevant to indexing from it. 
+It also clusters the queries by mapping each query to its query template 
+which does not have the specific params.
+"""
 def get_columns_from_logs(logs_path, max_width=2):
     QCOL = 13
     df = pd.read_csv(logs_path, header=None)
     queries = filter_interesting_queries(df[QCOL].tolist())
     with pg.connect(CONNECTION_STRING) as conn:
         table_column_map = get_table_column_map(conn)
-#         print(table_column_map)
     gqueries, cluster_frequencies, clusters = cluster_queries(queries)
     table_column_combos = get_relevant_columns(
         clusters, cluster_frequencies, table_column_map, max_width=MAX_WIDTH)
     return table_column_combos, cluster_frequencies, clusters
 
 
-def generate_index_creation_queries(columns, conditional=False):
-    conditional_str = ''
-    if conditional:
-        conditional_str = 'IF NOT EXISTS'
+def generate_index_creation_queries(columns):
     query_template = 'CREATE INDEX ON {} ({})'
     queries = []
 
@@ -169,6 +178,9 @@ def create_hypothetical_indexes(index_queries, conn):
             res = cur.fetchall()
 
 
+"""
+Scales the given cost estimation based on the frequency of each query.
+"""
 def get_scaled_loss(cluster_frequencies, costs):
     cost = 0.
     for cluster, count in cluster_frequencies.items():
@@ -176,6 +188,9 @@ def get_scaled_loss(cluster_frequencies, costs):
     return cost
 
 
+"""
+Drops all the hypothetical indexes in the db.
+"""
 def remove_hypo_indexes(conn):
     reset_indexes_q = 'SELECT * FROM hypopg_reset();'
     with conn.cursor() as cur:
@@ -183,11 +198,19 @@ def remove_hypo_indexes(conn):
         res = cur.fetchall()
 
 
+"""
+Enables hypopg in the given database
+"""
 def enable_hypopg(conn):
     with conn.cursor() as cur:
         cur.execute('CREATE EXTENSION IF NOT EXISTS hypopg;')
 
 
+"""
+Retrieves the query plan costs for a given set of queries
+
+@param query_clusters A dictionary of the form query_fingerprint: query
+"""
 def get_query_costs(query_clusters, conn):
     costs = dict()
     with conn.cursor() as cur:
@@ -198,7 +221,14 @@ def get_query_costs(query_clusters, conn):
     return costs
 
 
-def find_best_index(log_file_path, timeout, max_iterations=100000):
+"""
+Generates a file called actions.sql with create index statements based on its evaluation of given the workload logs.
+
+@param log_file_path Filepath of the workload logs (csv)
+@param timeout Timeout in minutes of the form Xm
+@param max_iterations Specifies the number of times the function should try a new configuration
+"""
+def find_best_index(log_file_path, timeout, max_iterations=99999):
     TIMEOUT_BUFFER = 20
 
     start_time = time.time()
@@ -227,7 +257,8 @@ def find_best_index(log_file_path, timeout, max_iterations=100000):
 
             # calculate the costs with no indexes
             baseline_costs = get_query_costs(clusters, conn)
-            baseline_cost = get_scaled_loss(cluster_frequencies, baseline_costs)
+            baseline_cost = get_scaled_loss(
+                cluster_frequencies, baseline_costs)
             min_cost = baseline_cost
 
             best_config = []
@@ -258,7 +289,6 @@ def find_best_index(log_file_path, timeout, max_iterations=100000):
 
             time_elapsed = time.time() - start_time
             if i % 1000 == 0 or ((timeout - time_elapsed) <= TIMEOUT_BUFFER):
-                #                 print(best_config, min_cost, baseline_cost)
                 index_creation_queries = generate_index_creation_queries(
                     best_config)
                 with open('actions.sql', 'w') as f:
@@ -274,7 +304,8 @@ def find_best_index(log_file_path, timeout, max_iterations=100000):
                         'clusters': clusters
                     }, f)
                 if (timeout - time_elapsed) <= TIMEOUT_BUFFER:
-                    vprint(f'--- {time_elapsed}s have elapsed, within {TIMEOUT_BUFFER}s of the timeout {timeout}s. Exiting ---')
+                    vprint(
+                        f'--- {time_elapsed}s have elapsed, within {TIMEOUT_BUFFER}s of the timeout {timeout}s. Exiting ---')
                     return
 
         index_creation_queries = generate_index_creation_queries(best_config)
@@ -283,7 +314,6 @@ def find_best_index(log_file_path, timeout, max_iterations=100000):
         vprint('--- Best Indexes END ---')
         with open('actions.sql', 'w') as f:
             for query in index_creation_queries:
-
                 f.write("{};\n".format(query))
         with open(state_file, 'wb') as f:
             saved_objects = pickle.dump({

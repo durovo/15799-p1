@@ -1,8 +1,10 @@
 from index_recommender import find_best_index
+
+
 def task_project1():
     def generate_actions(workload_csv, timeout):
         find_best_index(workload_csv, timeout)
-    return {        
+    return {
         # A list of actions. This can be bash or Python callables.
         "actions": [generate_actions],
         # Always rerun this task.
