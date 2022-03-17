@@ -8,6 +8,7 @@ from pglast import parser
 from random import shuffle, randint, choice
 import os.path
 import pickle
+import time
 
 verbose = True
 
@@ -24,17 +25,15 @@ MAX_WIDTH = 3
     Drops all the non-constrained indexes
     'borrowed' from https://stackoverflow.com/a/48862822
 """
-
-
 def drop_all_indexes(conn):
     vprint("--- Dropping all existing indexes ---")
-    get_drop_index_queries_query = """select format('drop index %I.%I;', s.nspname, i.relname) as drop_statement
-                from pg_index idx
-                join pg_class i on i.oid = idx.indexrelid
-                join pg_class t on t.oid = idx.indrelid
-                join pg_namespace s on i.relnamespace = s.oid
-                where s.nspname in ('public')
-                and not idx.indisprimary;"""
+    get_drop_index_queries_query = """SELECT format('drop index %I.%I;', s.nspname, i.relname) as drop_statement
+                FROM pg_index idx
+                JOIN pg_class i on i.oid = idx.indexrelid
+                JOIN pg_class t on t.oid = idx.indrelid
+                JOIN pg_namespace s on i.relnamespace = s.oid
+                WHERE s.nspname in ('public')
+                AND not idx.indisprimary;"""
     with conn.cursor() as cur:
         cur.execute(get_drop_index_queries_query)
         drop_queries = cur.fetchall()
@@ -67,18 +66,18 @@ def filter_interesting_queries(queries):
 
 
 def cluster_queries(queries):
-    group_counts = defaultdict(int)
-    group_repr = {}
+    cluster_frequencies = defaultdict(int)
+    clusters = {}
     gqueries = set()
     for query in queries:
         try:
             generalized = parser.fingerprint(query)
-            group_counts[generalized] += 1
-            group_repr[generalized] = query
+            cluster_frequencies[generalized] += 1
+            clusters[generalized] = query
             gqueries.add(generalized)
         except:
             pass
-    return gqueries, group_counts, group_repr
+    return gqueries, cluster_frequencies, clusters
 
 
 def get_relevant_columns(clusters, cluster_counts, table_column_map, max_width):
@@ -138,14 +137,17 @@ def get_columns_from_logs(logs_path, max_width=2):
     with pg.connect(CONNECTION_STRING) as conn:
         table_column_map = get_table_column_map(conn)
 #         print(table_column_map)
-    gqueries, group_counts, group_repr = cluster_queries(queries)
+    gqueries, cluster_frequencies, clusters = cluster_queries(queries)
     table_column_combos = get_relevant_columns(
-        group_repr, group_counts, table_column_map, max_width=MAX_WIDTH)
-    return table_column_combos, group_counts, group_repr
+        clusters, cluster_frequencies, table_column_map, max_width=MAX_WIDTH)
+    return table_column_combos, cluster_frequencies, clusters
 
 
-def generate_index_creation_queries(columns):
-    query_template = 'CREATE INDEX IF NOT EXISTS ON {} ({})'
+def generate_index_creation_queries(columns, conditional=False):
+    conditional_str = ''
+    if conditional:
+        conditional_str = 'IF NOT EXISTS'
+    query_template = 'CREATE INDEX ON {} ({})'
     queries = []
 
     for column_group in columns:
@@ -167,9 +169,9 @@ def create_hypothetical_indexes(index_queries, conn):
             res = cur.fetchall()
 
 
-def get_scaled_loss(group_counts, costs):
+def get_scaled_loss(cluster_frequencies, costs):
     cost = 0.
-    for cluster, count in group_counts.items():
+    for cluster, count in cluster_frequencies.items():
         cost += count*costs[cluster]
     return cost
 
@@ -196,8 +198,11 @@ def get_query_costs(query_clusters, conn):
     return costs
 
 
-def find_best_index(log_file_path, max_iterations=3000):
+def find_best_index(log_file_path, timeout, max_iterations=100000):
+    TIMEOUT_BUFFER = 20
 
+    start_time = time.time()
+    timeout = int(timeout.replace('m', ''))*60
     with open('config.json', 'w') as f:
         f.write('{"VACUUM": false}')
 
@@ -205,21 +210,24 @@ def find_best_index(log_file_path, max_iterations=3000):
 
         state_file = log_file_path + '.statefile'
 
+        vprint(f"--- State being maintained in {state_file} ---")
+
         if (os.path.isfile(state_file)):
             with open(state_file, 'rb') as f:
                 saved_objects = pickle.load(f)
                 best_config = saved_objects['best_config']
-                min_cost = saved_objects['best_cost']
+                min_cost = saved_objects['min_cost']
                 baseline_cost = saved_objects['baseline_cost']
                 table_column_combos = saved_objects['table_column_combos']
-                group_counts = saved_objects['group_counts']
-                group_repr = saved_objects['group_repr']
+                cluster_frequencies = saved_objects['cluster_frequencies']
+                clusters = saved_objects['clusters']
         else:
-            table_column_combos, group_counts, group_repr = get_columns_from_logs(
+            table_column_combos, cluster_frequencies, clusters = get_columns_from_logs(
                 log_file_path)
+
             # calculate the costs with no indexes
-            baseline_costs = get_query_costs(group_repr, conn)
-            baseline_cost = get_scaled_loss(group_counts, baseline_costs)
+            baseline_costs = get_query_costs(clusters, conn)
+            baseline_cost = get_scaled_loss(cluster_frequencies, baseline_costs)
             min_cost = baseline_cost
 
             best_config = []
@@ -232,17 +240,24 @@ def find_best_index(log_file_path, max_iterations=3000):
 
         potential_indexes = get_potential_indexes(table_column_combos)
         for i in range(max_iterations):
+
+            # generate a random combination of indexes
             cmb = get_random_indexes(potential_indexes)
             index_q = generate_index_creation_queries(cmb)
             create_hypothetical_indexes(index_q, conn)
-            costs = get_query_costs(group_repr, conn)
-            cost = get_scaled_loss(group_counts, costs)
+
+            costs = get_query_costs(clusters, conn)
+            # make sure that the total cost is proportional to the cluster frequencies
+            cost = get_scaled_loss(cluster_frequencies, costs)
+
             remove_hypo_indexes(conn)
+
             if cost < min_cost or (cost == min_cost and len(cmb) < len(best_config)):
                 min_cost = cost
                 best_config = cmb
 
-            if i % 1000 == 0:
+            time_elapsed = time.time() - start_time
+            if i % 1000 == 0 or ((timeout - time_elapsed) <= TIMEOUT_BUFFER):
                 #                 print(best_config, min_cost, baseline_cost)
                 index_creation_queries = generate_index_creation_queries(
                     best_config)
@@ -252,14 +267,20 @@ def find_best_index(log_file_path, max_iterations=3000):
                 with open(state_file, 'wb') as f:
                     saved_objects = pickle.dump({
                         'best_config': best_config,
-                        'best_cost': min_cost,
+                        'min_cost': min_cost,
                         'baseline_cost': baseline_cost,
                         'table_column_combos': table_column_combos,
-                        'group_counts': group_counts,
-                        'group_repr': group_repr
-                    })
+                        'cluster_frequencies': cluster_frequencies,
+                        'clusters': clusters
+                    }, f)
+                if (timeout - time_elapsed) <= TIMEOUT_BUFFER:
+                    vprint(f'--- {time_elapsed}s have elapsed, within {TIMEOUT_BUFFER}s of the timeout {timeout}s. Exiting ---')
+                    return
 
         index_creation_queries = generate_index_creation_queries(best_config)
+        vprint('--- Best Indexes ---')
+        vprint(index_creation_queries)
+        vprint('--- Best Indexes END ---')
         with open('actions.sql', 'w') as f:
             for query in index_creation_queries:
 
@@ -267,9 +288,9 @@ def find_best_index(log_file_path, max_iterations=3000):
         with open(state_file, 'wb') as f:
             saved_objects = pickle.dump({
                 'best_config': best_config,
-                'best_cost': min_cost,
+                'min_cost': min_cost,
                 'baseline_cost': baseline_cost,
                 'table_column_combos': table_column_combos,
-                'group_counts': group_counts,
-                'group_repr': group_repr
-            })
+                'cluster_frequencies': cluster_frequencies,
+                'clusters': clusters
+            }, f)
