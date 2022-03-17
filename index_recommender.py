@@ -19,7 +19,7 @@ def vprint(*kwargs):
 
 
 CONNECTION_STRING = "dbname='project1db' user='project1user' password='project1pass' host='localhost'"
-MAX_WIDTH = 3
+MAX_WIDTH = 4
 
 """
     Drops all the non-constrained indexes
@@ -33,7 +33,7 @@ def drop_all_indexes(conn):
                 JOIN pg_class t on t.oid = idx.indrelid
                 JOIN pg_namespace s on i.relnamespace = s.oid
                 WHERE s.nspname in ('public')
-                AND not idx.indisprimary;"""
+                AND not idx.indisprimary AND not idx.indisprimary;"""
     with conn.cursor() as cur:
         cur.execute(get_drop_index_queries_query)
         drop_queries = cur.fetchall()
