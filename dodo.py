@@ -30,6 +30,8 @@ def task_project1_setup():
             'sudo apt update',
             'sudo apt -y install python3-pip',
             'pip3 install -r requirements.txt',
-            'sudo apt -y install postgresql-14-hypopg'
+            'sudo apt -y install postgresql-14-hypopg',
+            'sudo cat pgtune.conf >> /etc/postgresql/14/main/postgresql.conf',
+            'sudo service postgresql restart'
         ]
     }
